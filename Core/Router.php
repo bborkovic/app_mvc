@@ -1,12 +1,13 @@
 <?php 
 
+namespace Core;
 
 class Router {
 
-	protected $routes = [];
-	protected $params = [];
+	protected $routes = []; // These arefilled via add method
+	protected $params = []; // These are filled via match method
 
-	public function add($route, $params=[]) {
+	public function add($route, $in_params=[]) {
 		// Escape forward slashes
 		$route = preg_replace('/\//' , '\\/', $route);
 
@@ -18,17 +19,19 @@ class Router {
 
 		// Add start and end delimiters
 		$route = '/^' . $route . '$/';
-		$this->routes[$route] = $params;
+		$this->routes[$route] = $in_params;
 	}
 
 	public function getRoutes() {
+		// return routes
 		return $this->routes;
 	}
 
 	public function match($url, $in_params=[]) {
 		foreach($this->routes as $route=>$value) {
 			if ( preg_match($route, $url, $matches)) {
-				$params = [];
+				// $params = [];
+				$params = $value;
 				foreach($matches as $k => $match){
 					if(is_string($k)) {
 						$params[$k] = $match;
@@ -42,32 +45,35 @@ class Router {
 	}
 
 	public function getParams() {
+		// return params
 		return $this->params;
 	}
 
-
 	public function dispatch($url) {
+
+		$url = $this->removeQueryStringVariables($url);
 
 		if ( $this->match($url)) {
 			$controller = $this->params['controller'];
 			$controller = $this->convertToStudlyCaps($controller);
+			// $controller = "App\Controllers\\$controller";
+			$controller = $this->getNamespace() . $controller;
 
 			if( class_exists($controller)) {
-				$controller_object = new $controller;
-				$action = $this->action['action'];
+				$controller_object = new $controller($this->params);
+				$action = $this->params['action'];
 				$action = $this->convertToCamelCase($action);
 				if( is_callable([$controller_object , $action])) {
 					$controller_object->$action();
 				} else {
-				echo "Method $action ( in controller $controller not found";
+				echo "Error: Method $action ( in controller $controller not found";
 				} 
 			} else {
-				echo "Controller class $controller not found";
+				echo '<font color="red">Error: Controller class ' . $controller . ' not found</font>';
 			}
 		} else {
-			echo "The URL $url does not match";
+			echo "Error: The URL $url does not match";
 		}
-
 	}
 
 	protected function convertToStudlyCaps($string){
@@ -77,5 +83,28 @@ class Router {
 	protected function convertToCamelCase($string){
 		return lcfirst($this->convertToStudlyCaps($string));
 	}
+
+	protected function removeQueryStringVariables($url) {
+		if ( $url != '') {
+			$parts = explode('&', $url, 2);
+			if( strpos($parts[0], '=') == false) {
+				$url = $parts[0];
+			} else {
+				$url = '';
+			}
+		}
+		return $url;
+	}
+
+	protected function getNamespace() {
+		$namespace = 'App\Controllers\\';
+		if ( array_key_exists('namespace', $this->params)) {
+			$namespace .= $this->params['namespace'] . '\\';
+		}
+		echo "<br/>" . htmlspecialchars($namespace) . "<br/>";
+		return $namespace;
+	}
+
+}
 
 ?>
