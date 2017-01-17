@@ -101,7 +101,6 @@ class Router {
 		if ( array_key_exists('namespace', $this->params)) {
 			$namespace .= $this->params['namespace'] . '\\';
 		}
-		echo "<br/>" . htmlspecialchars($namespace) . "<br/>";
 		return $namespace;
 	}
 

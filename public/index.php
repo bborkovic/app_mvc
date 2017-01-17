@@ -4,10 +4,8 @@
 	// error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 
-	require '../Core/functions.php';
-	// require '../Core/Router.php';
-	// require '../App/Controllers/Posts.php';
-
+	# Instantiate DB class
+	require_once '../Core/functions.php';
 
 	spl_autoload_register( function($class) {
 		$root = dirname(__DIR__); // get the parent directory
@@ -18,11 +16,11 @@
 		}
 	});
 
+	$database = new Core\Database();
 	$router = new Core\Router();
 
 
 	$url = $_SERVER['QUERY_STRING'];
-	echo $url . "<br/>";
 
 	$router->add('{controller}/{action}');
 	$router->add('{controller}/{id:\d+}/{action}');
@@ -31,22 +29,8 @@
 	# !! Run controllers that are needed
 	$router->dispatch($url);
 
-	// print_r($router->getParams());
+	echo "<hr>URL:<br/>$url";
 
-	// foreach ($router->getRoutes() as $regex => $params) {
-	// 	echo "<br/>" . "***" . htmlspecialchars($regex) . "***";
-	// }
-	// echo "<br/>";
-
-
-	// if($router->match($url)) {
-	// 	echo "Match found";
-	// 	echo "<pre>";
-	// 	print_r($router->getParams());
-	// 	echo "</pre>";
-	// } else {
-	// 	echo "No route found for URL {$url}";
-	// }
 
 ?>
 
