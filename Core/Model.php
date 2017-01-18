@@ -2,7 +2,8 @@
 
 namespace Core;
 
-class DatabaseObject {
+class Model {
+
 
 	// static field that must be changed in every class
 	protected static $table_name = "dummy";
@@ -19,6 +20,18 @@ class DatabaseObject {
 	// $dt->setTimestamp( $ts );
 
 	// define children classes, it's tables and foreign_key names
+
+	protected static function getDB() {
+		// echo "<br/>" . " ... calling getDB()";
+		static $database = null;
+		if ( $database == null ) {
+			// echo "<br/>" . " ... instantiate Database()";
+			$database = new Database();
+		}
+		return $database;
+	}
+
+
 	public $children = array(
 		'children1' => array( // This is class Name
 			'table_name' => 'table_name',
@@ -48,7 +61,8 @@ class DatabaseObject {
 
 	// Static database methods
 	public static function find_by_sql($sql="", $bind_array=[]) {
-		global $database;
+		// global $database;
+		$database = static::getDB();
 		$records = $database->query_select_prepared($sql , $bind_array);
 		if($records) {
 			$object_array = [];
@@ -81,12 +95,14 @@ class DatabaseObject {
 	}
 
 	public static function count_all(){
-		global $database;
+		// global $database;
+		$database = static::getDB();
 		return $database->count_by_sql_prepared("select count(*) from " . static::$table_name );
 	}
 
 	public static function count_by_sql($sql, $bind_array=[]){
-		global $database;
+		// global $database;
+		$database = static::getDB();
 		return $database->count_by_sql_prepared($sql, $bind_array);
 	}
 
@@ -156,7 +172,8 @@ class DatabaseObject {
 
 		if( $this->saved ) { return false; }
 		// insert existing instance object into database
-		global $database;
+		// global $database;
+		$database = static::getDB();
 		$attributes = $this->attributes();
 		
 		// id is set by database automatically
@@ -181,7 +198,8 @@ class DatabaseObject {
 		if( $this->saved ) { return false; }
 
 		// this version includes timestamp attributes created_at,updated_at
-		global $database;
+		// global $database;
+		$database = static::getDB();
 		$attributes = $this->attributes();
 		
 		// id is set by database automatically
@@ -202,7 +220,8 @@ class DatabaseObject {
 
 	public function update() {
 		// update existing instance object into database
-		global $database;
+		// global $database;
+		$database = static::getDB();
 		$attributes = $this->attributes();
 		unset($attributes["id"]); // remove id from list
 		$attributes_for_update = array();
@@ -216,10 +235,10 @@ class DatabaseObject {
 
 		$attributes['id'] = $this->id;
 
-		log_action("Update, sql = ", $sql);
-		log_action("Update, values = ", implode( ", " , $attributes) );
+		// log_action("Update, sql = ", $sql);
+		// log_action("Update, values = ", implode( ", " , $attributes) );
 		$records_updated = $database->query_dml_prepared($sql, $attributes);
-		log_action("Update, records: ", $records_updated);
+		// log_action("Update, records: ", $records_updated);
 
 		return $records_updated;
 	}
@@ -227,7 +246,8 @@ class DatabaseObject {
 	// version with created_at and updated_at timestamps
 	public function update_ts() {
 		// update existing instance object into database
-		global $database;
+		// global $database;
+		$database = static::getDB();
 		$attributes = $this->attributes();
 		unset($attributes["id"]); // remove id from list
 		$attributes_for_update = array();
@@ -247,7 +267,8 @@ class DatabaseObject {
 
 	public function delete() {
 		// insert existing instance object into database
-		global $database;
+		// global $database;
+		$database = static::getDB();
 		$sql = "delete from " . static::$table_name . " where id = :id limit 1";
 		// echo $sql;
 		$rows_deleted = $database->query_dml_prepared($sql, [ ":id" => $this->id ]);

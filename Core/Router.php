@@ -66,13 +66,16 @@ class Router {
 				if( is_callable([$controller_object , $action])) {
 					$controller_object->$action();
 				} else {
-				echo "Error: Method $action ( in controller $controller not found";
+					// message("Error: Method $action ( in controller $controller not found", "error");
+					throw new \Exception("Method $action ( in controller $controller not found )");
 				} 
 			} else {
-				echo '<font color="red">Error: Controller class ' . $controller . ' not found</font>';
+				// message("Error: Controller class ' . $controller . ' not found", "error");
+				throw new \Exception("Error: Controller class ' . $controller . ' not found");
 			}
 		} else {
-			echo "Error: The URL $url does not match";
+			// message("Error: The URL $url does not match", "error");
+			throw new \Exception("Error: The URL $url does not match");
 		}
 	}
 

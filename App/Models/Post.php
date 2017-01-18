@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Core\DatabaseObject as DatabaseObject;
+use Core\Model;
 
-class Posts extends DatabaseObject {
+class Post extends Model {
 	
 	// table the class is related
 	public static $table_name = "posts";
@@ -12,6 +12,8 @@ class Posts extends DatabaseObject {
 	public static $primary_keys = array('id');
 	// columns of table users
 	
+	public $validations = array();
+
 	public $children = array(
 		'Ad' => array( // Class Name
 			'table_name' => 'ads',

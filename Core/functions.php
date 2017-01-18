@@ -16,6 +16,13 @@ function message( $text, $succ_flag="normal"){
 	echo "<font color=\"$color\">" . $text . '</font>';
 }
 
+function redirect_to( $location = NULL ) {
+  if ($location != NULL) {
+    header("Location: {$location}");
+    exit;
+  }
+}
+
 
 ?>
 

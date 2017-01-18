@@ -16,10 +16,10 @@
 		}
 	});
 
-	$database = new Core\Database();
+	set_error_handler('Core\Error::errorHandler');
+	set_exception_handler('Core\Error::exceptionHandler');
+
 	$router = new Core\Router();
-
-
 	$url = $_SERVER['QUERY_STRING'];
 
 	$router->add('{controller}/{action}');

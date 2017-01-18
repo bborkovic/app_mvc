@@ -1,10 +1,11 @@
 <?php
 namespace Core;
 
-require_once 'functions.php';
-require_once 'config.php';
+// require_once 'functions.php';
+// require_once 'config.php';
 
 use PDO;
+use App\Config;
 
 class Database {
 	
@@ -23,7 +24,7 @@ class Database {
 
 	public function open_connection() {
 		try {
-			$conn = new PDO("mysql:host=".DB_SERVER.";dbname=".DB_NAME.";charset=utf8", DB_USER, DB_PASS);
+			$conn = new PDO("mysql:host=".Config::DB_SERVER.";dbname=".Config::DB_NAME.";charset=utf8", Config::DB_USER, Config::DB_PASS);
 			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 		} catch (Exception $e) {
@@ -94,7 +95,7 @@ class Database {
 	}
 }
 
-$database = new Database();
-$db =& $database;
+// $database = new Database();
+// $db =& $database;
 
 ?>
