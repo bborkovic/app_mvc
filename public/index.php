@@ -1,11 +1,11 @@
 <?php
-	# Enable Error reporting
+
 	error_reporting(E_ALL ^ E_DEPRECATED);
-	// error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 
 	# Instantiate DB class
 	require_once '../Core/functions.php';
+	require_once '../Core/Session.php';
 
 	spl_autoload_register( function($class) {
 		$root = dirname(__DIR__); // get the parent directory
@@ -19,6 +19,7 @@
 	set_error_handler('Core\Error::errorHandler');
 	set_exception_handler('Core\Error::exceptionHandler');
 
+	// $session = new Core\Session();
 	$router = new Core\Router();
 	$url = $_SERVER['QUERY_STRING'];
 
@@ -28,9 +29,6 @@
 
 	# !! Run controllers that are needed
 	$router->dispatch($url);
-
-	echo "<hr>URL:<br/>$url";
-
 
 ?>
 

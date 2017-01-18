@@ -22,6 +22,5 @@
 	<a href="<?php echo $link; ?>">New Post</a>
 
 
-
 </body>
 </html>
