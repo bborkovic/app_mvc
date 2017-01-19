@@ -5,121 +5,128 @@ namespace Core;
 
 class Session {
 
-	private $logged_id = false;
-	public $user_id; // if it's logged in
-	public $message;
-	public $errors = [];
-	public $vars = [];
-	public $url = [];
+	private static $logged_id = false;
+	public static $user_id; // if it's logged in
+	public static $message;
+	public static $errors = [];
+	public static $vars = [];
+	public static $url = [];
 
-	function __construct(){
+	// private $logged_id = false;
+	// public $user_id; // if it's logged in
+	// public $message;
+	// public $errors = [];
+	// public $vars = [];
+	// public $url = [];
+
+	public static function session_start(){
 		session_start();
-		$this->check_message();
-		$this->check_login();
-		$this->check_vars();
-		$this->check_url();
+		static::check_message();
+		static::check_login();
+		// static::check_vars();
+		static::check_url();
 	}
 
-	public function is_logged_in(){
+	public static function is_logged_in(){
 		//
-		return $this->logged_id;
+		return static::$logged_id;
 	}
 
-	public function say_hello($out = "hello"){
-		//
-		echo $out;
-	}
-
-	public function login($user) {
+	public static function login($user) {
 		// database should find user based on username/password
 		if($user){
-			$this->user_id = $_SESSION['user_id'] = $user->id;
-			$this->logged_id = true;
+			static::$user_id = $_SESSION['user_id'] = $user->id;
+			static::$logged_id = true;
 		}
 	}
 
-	public function logout() {
+	public static function logout() {
 		unset($_SESSION['user_id']);
-		unset($this->user_id);
-		$this->logged_id = false;
+		static::$user_id = null;
+		static::$logged_id = false;
 	}
 
-	public function message($mess=[]){
+	public static function message($mess=[]){
 		if(!empty($mess)) {
 			$_SESSION['message'] = $mess; // important
-			$this->message = $mess;
+			static::$message = $mess;
 			return true;
 		} else {
 			// reset message - it's been read
-			$tmp = $this->message;
-			$this->message = [];
+			$tmp = static::$message;
+			static::$message = [];
 			unset($_SESSION['message']);
 			return $tmp;
-			
 		}
 	}
 
-	public function save_error($error, $module="") {
-		array_push($this->errors , "Error: {$error}, Module: {$module}");
-	}
+	// public function save_error($error, $module="") {
+	// 	array_push($this->errors , "Error: {$error}, Module: {$module}");
+	// }
 
-	public function get_errors() {
-		if( !empty($this->errors) ) {
-			return join("; " , $this->errors);
-		} else {
-			return "";
-		}
-	}
+	// public function get_errors() {
+	// 	if( !empty($this->errors) ) {
+	// 		return join("; " , $this->errors);
+	// 	} else {
+	// 		return "";
+	// 	}
+	// }
 
 	// private methods
-	private function check_login() {
+	private static function check_login() {
 		if(isset($_SESSION['user_id'])) {
-			$this->user_id = $_SESSION['user_id'];
-			$this->logged_id = true;
+			static::$user_id = $_SESSION['user_id'];
+			static::$logged_id = true;
 		} else {
-			unset($this->user_id);
-			$this->logged_id=false;
+			static::$user_id = null;
+			static::$logged_id=false;
 		}
 	}
 
-	private function check_message() {
+	private static function check_message() {
 		if(isset($_SESSION['message'])) {
-			$this->message = $_SESSION['message'];
+			static::$message = $_SESSION['message'];
 		} else {
-			$this->message = [];
+			static::$message = [];
 		}
 	}
 
-	private function check_vars() {
-		if(isset($_SESSION['vars'])) {
-			$this->vars = $_SESSION['vars'];
-		} else {
-			$this->vars = [];
-		}
-	}
+	// private function check_vars() {
+	// 	if(isset($_SESSION['vars'])) {
+	// 		$this->vars = $_SESSION['vars'];
+	// 	} else {
+	// 		$this->vars = [];
+	// 	}
+	// }
 
-	private function check_url() {
+	private static function check_url() {
 		if(isset($_SESSION['url'])) {
-			$this->url = $_SESSION['url'];
+			static::$url = $_SESSION['url'];
 		} else {
-			$this->url = [];
+			static::$url = [];
 		}
 		$to_add = $_SERVER['QUERY_STRING'];
 		if($to_add == "favicon.ico") { return true;}
-		array_unshift($this->url , $to_add);
+		array_unshift(static::$url , $to_add);
 
 		// keep just 10 newest elements in array
-		$_SESSION['url'] = array_slice($this->url, 0, 10);
-		$this->url = $_SESSION['url'];
+		$_SESSION['url'] = array_slice(static::$url, 0, 10);
+		static::$url = $_SESSION['url'];
 	}
 
-	public function get_current_url() {
-		return $this->url[0];
+	public static function get_current_url(){
+		$url = static::$url;
+		return $url[0];
 	}
 
-	public function get_latest_url() {
-		$current_url = $this->url[0];
-		foreach ($this->url as $url) {
+	// public static function get_current_url() {
+	// 	$url = static::$url;
+	// 	return $url[0];
+	// }
+
+	public static function get_latest_url() {
+		$current_url = static::$url[0];
+		foreach (static::$url as $url) {
 			if($url != $current_url){
 				return $url;
 			}
@@ -130,6 +137,6 @@ class Session {
 
 }
 
-$session = new Session();
+// $session = new Session();
 
 ?>

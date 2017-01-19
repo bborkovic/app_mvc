@@ -3,10 +3,9 @@
 
 <div class="panel-body">
 
+<?php echo output_message(); ?>
+
 	<div class="row">
-
-		<div class="message">Message</div>
-
 		<!-- Side navigation -->
 		<div class="col-sm-2">
 			<p><a href=""></a></p>

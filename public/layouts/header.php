@@ -1,5 +1,4 @@
-<?php global $session; ?>
-
+<?php use Core\Session; ?>
 
 <!DOCTYPE html>
 <html>
@@ -47,8 +46,8 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="<?php echo ($session->is_logged_in()) ? "logout.php" : "login.php"; ?>">
-          <?php echo ($session->is_logged_in()) ? "Logout" : "Login"; 
+        <li><a href="<?php echo (Session::is_logged_in()) ? "/users/logout" : "/users/login"; ?>">
+          <?php echo (Session::is_logged_in()) ? "Logout" : "Login"; 
           ?>
           </a>
         </li>

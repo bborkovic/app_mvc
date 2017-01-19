@@ -6,6 +6,7 @@
 	# Instantiate DB class
 	require_once '../Core/functions.php';
 	require_once '../Core/Session.php';
+	Core\Session::session_start();
 
 	spl_autoload_register( function($class) {
 		$root = dirname(__DIR__); // get the parent directory
@@ -30,10 +31,6 @@
 	# !! Run controllers that are needed
 	$router->dispatch($url);
 
-	// echo "<hr/>";
-	// echo "Current url: " . $session->get_current_url();
-	// echo "<br/>";
-	// echo "Latest url: " . $session->get_latest_url();
 
 ?>
 

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use Core\View;
 use Core\Form;
+use Core\Session;
 use App\Models\Post;
 use App\Models\User;
 
@@ -26,9 +27,10 @@ class Posts extends \Core\Controller {
 		if(isset($_POST['submit'])) {
 			$post = $form->parsePost($_POST, true); // get post from parsed $_POST
 			if($post->create()) {
+				Session::message( ["New Post Created" , "success"]);
 				redirect_to('index');
 			} else {
-				echo "Error saving! " . $error->get_errors();
+				Session::message( ["Error saving! " . $error->get_errors() , "success"]);
 			}
 		} 
 		// render view
@@ -37,7 +39,6 @@ class Posts extends \Core\Controller {
 
 	public function editAction() {
 		// global $session;
-		$message = "";
 		$post = Post::find_by_id( $this->route_params['id'] );
 		$form = new Form($post, ["name" , "details"]);
 		$form->action = "edit";
@@ -48,31 +49,27 @@ class Posts extends \Core\Controller {
 			// var_dump($form);
 			// Save user to DB and display message if necessary
 			if($post->update()) {
-				$message = "Post saved! ";
+				Session::message(["Post saved!" , "success"]);
 			} else {
-				$message = "Error saving! " . $error->get_errors();
+				Session::message([ "Error saving! " . $error->get_errors() , "error"]);
 			}
 		} 
-		View::render('Posts/edit.php', [ "form" => $form , "message" => $message] );
-
-
+		View::render('Posts/edit.php', [ "form" => $form ] );
 	}
 
 	public function deleteAction() {
-
 		$post = Post::find_by_id( $this->route_params['id'] );
 		if($post->delete()) {
-			echo "Post deleted!";
+			Session::message(["Post <strong>$post->name</strong> deleted!" , "success"]);
 			redirect_to('/posts/index');
 		} else {
-			echo "Error saving! " . $error->get_errors();
+			Session::message(["Error saving! " . $error->get_errors() , "success"]);
 		}
 	}
 
 
 	protected function before() {
-		global $session;
-		if( !$session->is_logged_in() and $this->route_params['action'] != 'index'){
+		if( !Session::is_logged_in() and $this->route_params['action'] != 'index'){
 			redirect_to('/users/login');
 		}
 	}

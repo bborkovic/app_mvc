@@ -3,6 +3,8 @@
 
 <div class="panel-body">
 
+	<?php echo output_message(); ?>
+
 	<div class="row">
 
 	<!-- Side navigation -->
@@ -25,9 +27,9 @@
 							<td><a href="<?php echo $post->id;?>/delete">Delete</a></td>
 						</tr>
 					<?php endforeach; ?>
-
 				</tbody>
 			</table>
+			<a href="add-new" class="btn btn-default">Create</a>
 		</div>
 	</div>
 </div>
