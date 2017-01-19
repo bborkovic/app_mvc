@@ -5,6 +5,9 @@ namespace App\Controllers;
 use Core\View;
 use Core\Form;
 use App\Models\Post;
+use App\Models\User;
+
+
 
 class Posts extends \Core\Controller {
 	
@@ -65,10 +68,16 @@ class Posts extends \Core\Controller {
 		}
 	}
 
-	protected function after() {
-	}
 
 	protected function before() {
+		global $session;
+		if( !$session->is_logged_in() and $this->route_params['action'] != 'index'){
+			$session->message = 
+			redirect_to('/users/login');
+		}
+	}
+
+	protected function after() {
 	}
 
 }
