@@ -12,7 +12,7 @@ class Users extends \Core\Controller {
 	
 	public function login() {
 		global $session;
-		message("Hello from Controller: " . get_class($this) . ", Action: login()", "success");
+		// message("Hello from Controller: " . get_class($this) . ", Action: login()", "success");
 		$message = "";
 		if( isset($_POST['submit'])) {
 

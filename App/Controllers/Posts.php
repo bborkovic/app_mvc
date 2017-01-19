@@ -37,6 +37,7 @@ class Posts extends \Core\Controller {
 
 	public function editAction() {
 		// global $session;
+		$message = "";
 		$post = Post::find_by_id( $this->route_params['id'] );
 		$form = new Form($post, ["name" , "details"]);
 		$form->action = "edit";
@@ -47,13 +48,12 @@ class Posts extends \Core\Controller {
 			// var_dump($form);
 			// Save user to DB and display message if necessary
 			if($post->update()) {
-				echo "Post saved! ";
+				$message = "Post saved! ";
 			} else {
-				echo "Error saving! " . $error->get_errors();
+				$message = "Error saving! " . $error->get_errors();
 			}
 		} 
-
-		View::render('Posts/edit.php', [ "form" => $form ] );
+		View::render('Posts/edit.php', [ "form" => $form , "message" => $message] );
 
 
 	}
