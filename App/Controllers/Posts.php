@@ -36,12 +36,11 @@ class Posts extends \Core\Controller {
 	}
 
 	public function editAction() {
-
+		// global $session;
 		$post = Post::find_by_id( $this->route_params['id'] );
 		$form = new Form($post, ["name" , "details"]);
 		$form->action = "edit";
 		$form->method = "post";
-
 
 		if(isset($_POST['submit'])) {
 			$post = $form->parsePost($_POST, true);
@@ -55,6 +54,8 @@ class Posts extends \Core\Controller {
 		} 
 
 		View::render('Posts/edit.php', [ "form" => $form ] );
+
+
 	}
 
 	public function deleteAction() {
@@ -72,7 +73,6 @@ class Posts extends \Core\Controller {
 	protected function before() {
 		global $session;
 		if( !$session->is_logged_in() and $this->route_params['action'] != 'index'){
-			$session->message = 
 			redirect_to('/users/login');
 		}
 	}

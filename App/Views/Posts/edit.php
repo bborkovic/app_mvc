@@ -1,17 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Home</title>
-</head>
-<body>
-	<h3>Welcome, from Posts->edit</h3>
-
-	<a href="/posts/index">Back to list</a>
-
-	<?php $form->render(); ?>
+<?php require_once('layouts/header.php'); ?>
 
 
+<div class="panel-body">
 
-</body>
-</html>
+	<div class="row">
+
+	<!-- Side navigation -->
+		<div class="col-sm-2">
+			<p><a href=""></a></p>
+			<p><a href="/posts/index">Posts index</a></p>
+
+		</div>
+
+		<div class="col-sm-5">
+			<?php $form->render(); ?>
+		</div>
+	</div>
+</div>
+
+
+
+
+<?php require_once('layouts/footer.php'); ?>

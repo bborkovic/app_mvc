@@ -1,26 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Home</title>
-</head>
-<body>
-	<h3>Welcome, from Posts Views</h3>
-
-	<table>
-		<?php foreach ($posts as $post) : ?>
-			<tr>
-				<td><?php echo $post->name; ?></td>
-				<td><?php echo $post->details; ?></td>
-				<td><a href="<?php echo $post->id; ?>/edit">edit</a></td>
-				<td><a href="<?php echo $post->id; ?>/delete">delete</a></td>
-			</tr>
-		<?php endforeach; ?>	
-	</table>
+<?php require_once('layouts/header.php'); ?>
 
 
-	<a href="<?php echo $link; ?>">New Post</a>
+<div class="panel-body">
+
+	<div class="row">
+
+	<!-- Side navigation -->
+		<div class="col-sm-2">
+			<p><a href=""></a></p>
+			<p><a href="/posts/index">Posts index</a></p>
+		</div>
+
+		<div class="col-sm-5">
+			<table class="table table-striped">
+				<thead>
+					<tr><th>name</th><th>details</th><th>Edit</th><th>Delete</th></tr>
+				</thead>
+				<tbody>
+					<?php foreach ($posts as $post): ?>
+						<tr>
+							<td><?php echo $post->name; ?></td>
+							<td><?php echo $post->details; ?></td>
+							<td><a href="<?php echo $post->id;?>/edit">Edit</a></td>
+							<td><a href="<?php echo $post->id;?>/delete">Delete</a></td>
+						</tr>
+					<?php endforeach; ?>
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
 
 
-</body>
-</html>
+
+
+<?php require_once('layouts/footer.php'); ?>
