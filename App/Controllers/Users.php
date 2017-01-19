@@ -22,7 +22,8 @@ class Users extends \Core\Controller {
 			$found_user = User::authenticate( $username, $password );
 			if($found_user) {
 				$session->login($found_user);
-				redirect_to('/posts/index');
+				// echo "You are logged in";
+				redirect_to('/' . $session->get_latest_url());
 			} else {
 				$message = "Username/Password combination not corrent";
 			}

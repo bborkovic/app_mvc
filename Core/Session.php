@@ -9,12 +9,15 @@ class Session {
 	public $user_id; // if it's logged in
 	public $message;
 	public $errors = [];
-	public $bag = [];
+	public $vars = [];
+	public $url = [];
 
 	function __construct(){
 		session_start();
 		$this->check_message();
 		$this->check_login();
+		$this->check_vars();
+		$this->check_url();
 	}
 
 	public function is_logged_in(){
@@ -86,6 +89,44 @@ class Session {
 			$this->message = [];
 		}
 	}
+
+	private function check_vars() {
+		if(isset($_SESSION['vars'])) {
+			$this->vars = $_SESSION['vars'];
+		} else {
+			$this->vars = [];
+		}
+	}
+
+	private function check_url() {
+		if(isset($_SESSION['url'])) {
+			$this->url = $_SESSION['url'];
+		} else {
+			$this->url = [];
+		}
+		$to_add = $_SERVER['QUERY_STRING'];
+		if($to_add == "favicon.ico") { return true;}
+		array_unshift($this->url , $to_add);
+
+		// keep just 10 newest elements in array
+		$_SESSION['url'] = array_slice($this->url, 0, 10);
+		$this->url = $_SESSION['url'];
+	}
+
+	public function get_current_url() {
+		return $this->url[0];
+	}
+
+	public function get_latest_url() {
+		$current_url = $this->url[0];
+		foreach ($this->url as $url) {
+			if($url != $current_url){
+				return $url;
+			}
+		}
+		return $current_url;
+	}
+
 
 }
 

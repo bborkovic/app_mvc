@@ -30,6 +30,11 @@
 	# !! Run controllers that are needed
 	$router->dispatch($url);
 
+	echo "<hr/>";
+	echo "Current url: " . $session->get_current_url();
+	echo "<br/>";
+	echo "Latest url: " . $session->get_latest_url();
+
 ?>
 
 
