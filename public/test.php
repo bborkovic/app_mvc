@@ -5,18 +5,14 @@ error_reporting(E_ALL ^ E_DEPRECATED);
 // error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+session_start();
 
-echo "begin<br/>";
+$name = $_SESSION['name'];
+echo $name;
 
-
-try {
-	$dt = new DateTime("invalid time string");
-} catch (Exception $e) {
-	echo "Problem: " . $e->getMessage();
-}
+echo "<br/>" . session_id();
 
 
-
-echo "<br/>end";
+session_destroy();
 
 ?>
