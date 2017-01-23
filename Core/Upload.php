@@ -14,7 +14,11 @@ class Upload {
 			, 'image/png'
 			, 'image/webp'
 		);
-
+	protected $newName;
+	protected $typeCheckingOn = true;
+	protected $notTrusted = ['bin', 'cgi', 'exe', 'js', 'pl', 'php', 'py', 'sh', 'bash'];
+	protected $suffix = '.upload';
+	protected $renameDuplicates;
 
 	public function __construct($upload_folder) {
 
@@ -27,13 +31,34 @@ class Upload {
 			$upload_folder .= '/';
 		}
 		$this->destination = $upload_folder;
+		// set default max size ( 500k )
+		$this->max_size = 500*1024;
 	}
 
-	public function upload(){
+	public function upload($renameDuplicates = true){
+		$this->renameDuplicates = $renameDuplicates;
 		$uploaded = current($_FILES);
-		if( $this->check_file($uploaded) ){
-			$this->move_file($uploaded);
+		
+		if( is_array($uploaded['name']) ){
+			// multiple file upload
+			foreach ($uploaded['name'] as $key => $value) {
+				$currentFile['name'] = $uploaded['name'][$key];
+				$currentFile['type'] = $uploaded['type'][$key];
+				$currentFile['tmp_name'] = $uploaded['tmp_name'][$key];
+				$currentFile['error'] = $uploaded['error'][$key];
+				$currentFile['size'] = $uploaded['size'][$key];
+				if( $this->check_file( $currentFile )){
+					$this->move_file($currentFile);
+				}
+			}
+		} else {
+			// single file upload
+			if( $this->check_file($uploaded) ){
+				$this->move_file($uploaded);
+			}
 		}
+		
+
 	}
 
 	public function set_max_size($bytes){
@@ -60,9 +85,12 @@ class Upload {
 		if( ! $this->check_size($file) ){
 			return false;
 		}
-		if( ! $this->check_type($file) ){
-			return false;
+		if( $this->typeCheckingOn ) {
+			if( ! $this->check_type($file) ){
+				return false;
+			}
 		}
+		$this->checkName($file);
 		return true;
 	}
 
@@ -85,7 +113,20 @@ class Upload {
 	}
 
 	protected function move_file($file){
-		$this->messages[] = $file['name'] . ' was uploaded successfully.';
+		
+		$filename = isset($this->newName) ? $this->newName : $file['name'];
+		$success = move_uploaded_file($file['tmp_name'] , $this->destination . $filename);
+		
+		if ( $success ) {
+			$result = $file['name'] . ' was uploaded successfully';
+			if( !is_null($this->newName)) {
+				$result .= ', and was renamed to ' . $this->newName;
+			}
+			$result .= '.';
+			$this->messages[] = $result;
+		} else {
+			$this->messages[] = 'Could not upload ' . $file['name'];
+		}
 	}
 
 	protected function check_size($file){
@@ -109,6 +150,41 @@ class Upload {
 		}
 	}
 	
+	protected function checkName($file) {
+		$this->newName = null;
+		$nospaces = str_replace(' ', '_', $file['name']);
+		if($nospaces != $file['name']) {
+			$this->newName = $nospaces;
+		}
+		
+		// add suffix to suspisious file types
+		$nameparts = pathinfo($nospaces);
+		$extension = isset($nameparts['extension']) ? $nameparts['extension'] : '';
+		if( !$this->typeCheckingOn and !empty($this->suffix)) {
+			if( in_array($extension, $this->notTrusted) || empty($extension)) {
+				$this->newName = $nospaces . $this->suffix;
+			}
+		}
+		
+		// add number to duplicates ( 'filename_1.jpg' ) 
+		if( $this->renameDuplicates ) {
+			$name = isset($this->newName) ? $this->newName : $file['name'];
+			$existing = scandir($this->destination);
+			if( in_array($name, $existing) ){
+				$i = 1;
+				do {
+					$this->newName = $nameparts['filename'] . '_' . $i++;
+					if ( !empty($extension)) {
+						$this->newName .= ".$extension";
+					}
+					if ( in_array($extension, $this->notTrusted) || empty($extension)  ) {
+						$this->newName .= $this->suffix;
+					}
+				} while ( in_array($this->newName, $existing) );
+			}
+		}
+	}
+	
 	public static function convert_to_bytes( $val ) {
 		$val = trim($val);
 		$last = strtolower(substr($val, -1));
@@ -125,6 +201,17 @@ class Upload {
 			}
 		}
 		return $val;
+	}
+	
+	public function allowAllTyepes($suffix = null) {
+		$this->typeCheckingOn = false;
+		if( !is_null($suffix)) {
+			if( strpos($suffix, '.') === 0 or $suffix == '') {
+				$this->suffix = $suffix;
+			} else {
+				$this->suffix = ".$suffix";
+			}
+		}
 	}
 	
 	public static function convert_from_bytes($bytes) {

@@ -3,7 +3,6 @@
 	ini_set('display_errors', 1);
 	require_once '../Core/Upload.php';
 	use Core\Upload;
-
 ?>
 
 
@@ -12,17 +11,13 @@
 	$result = [];
 	if( isset($_POST['upload']) ) {
 		
-		echo "<pre>";
-		print_r($_FILES);
-		echo "</pre>";
-		echo "<br/>" . __DIR__;
-		echo "<br/>" . $_SERVER['PHP_SELF'];
-		
+		$uploaded = current($_FILES);
 		
 		$destination = __DIR__ . "/uploads";
 		try {
 			$upload = new Upload($destination);
-			$upload->set_max_size( $max );
+			$upload->set_max_size($max);
+			$upload->allowAllTyepes();
 			$upload->upload();
 			$result = $upload->get_messages();
 		} catch ( Exception $e ) {
@@ -59,8 +54,8 @@
 		<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data">
 			<p>
 				<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max; ?>">
-				<label for="filename">Select File:</label>
-				<input type="file" name="filename" id="filename">
+				<label for="filename[]">Select Files:</label>
+				<input type="file" name="filename[]" id="filename" multiple>
 			</p>
 			<p>
 				<input type="submit" name="upload" value="Upload File">
