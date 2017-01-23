@@ -24,8 +24,7 @@ class Users extends \Core\Controller {
 			if($found_user) {
 				Session::login($found_user);
 				// echo "You are logged in";
-				redirect_to('/' . Session::get_latest_url());
-				// redirect_to('/posts/index');
+				redirect_to('/' . Session::get_latest_url_not_like('logout'));
 			} else {
 				$message = "Username/Password combination not corrent";
 			}
@@ -35,16 +34,13 @@ class Users extends \Core\Controller {
 		$form->action = "login";
 		$form->method = "post";
 		View::render('Users/login.php', ["form" => $form , "message" => $message] );
-
 	}
 
 	public function logout() {
-		global $session;
-		message("Hello from Controller: " . get_class($this) . ", Action: logout()", "success");
+		Session::message(["Logout Complete" , "success"]);
 		Session::logout();
-		message("Logout complete");
+		redirect_to( '/' . Session::get_latest_url() );
 	}
-
 
 
 	protected function after() {

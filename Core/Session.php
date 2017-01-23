@@ -8,7 +8,6 @@ class Session {
 	private static $logged_id = false;
 	public static $user_id; // if it's logged in
 	public static $message;
-	public static $errors = [];
 	public static $vars = [];
 	public static $url = [];
 
@@ -21,9 +20,9 @@ class Session {
 
 	public static function session_start(){
 		session_start();
-		static::check_message();
 		static::check_login();
-		// static::check_vars();
+		static::check_message();
+		static::check_vars();
 		static::check_url();
 	}
 
@@ -47,6 +46,10 @@ class Session {
 	}
 
 	public static function message($mess=[]){
+		// if called with argument , it sets the message
+		// if called without, we're getting message and 
+		// reseting it to ''
+		// useful with header() ...
 		if(!empty($mess)) {
 			$_SESSION['message'] = $mess; // important
 			static::$message = $mess;
@@ -59,18 +62,6 @@ class Session {
 			return $tmp;
 		}
 	}
-
-	// public function save_error($error, $module="") {
-	// 	array_push($this->errors , "Error: {$error}, Module: {$module}");
-	// }
-
-	// public function get_errors() {
-	// 	if( !empty($this->errors) ) {
-	// 		return join("; " , $this->errors);
-	// 	} else {
-	// 		return "";
-	// 	}
-	// }
 
 	// private methods
 	private static function check_login() {
@@ -91,13 +82,13 @@ class Session {
 		}
 	}
 
-	// private function check_vars() {
-	// 	if(isset($_SESSION['vars'])) {
-	// 		$this->vars = $_SESSION['vars'];
-	// 	} else {
-	// 		$this->vars = [];
-	// 	}
-	// }
+	private static function check_vars() {
+		if(isset($_SESSION['vars'])) {
+			static::$vars = $_SESSION['vars'];
+		} else {
+			static::$vars = [];
+		}
+	}
 
 	private static function check_url() {
 		if(isset($_SESSION['url'])) {
@@ -114,15 +105,11 @@ class Session {
 		static::$url = $_SESSION['url'];
 	}
 
+	// public methods
 	public static function get_current_url(){
 		$url = static::$url;
 		return $url[0];
 	}
-
-	// public static function get_current_url() {
-	// 	$url = static::$url;
-	// 	return $url[0];
-	// }
 
 	public static function get_latest_url() {
 		$current_url = static::$url[0];
@@ -134,6 +121,15 @@ class Session {
 		return $current_url;
 	}
 
+	public static function get_latest_url_not_like($not_like) {
+		$current_url = static::$url[0];
+		foreach (static::$url as $url) {
+			if($url != $current_url and !(strpos($url, $not_like) !== false) ){
+				return $url;
+			}
+		}
+		return $current_url;
+	}
 
 }
 

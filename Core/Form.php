@@ -53,7 +53,6 @@ class Form {
 		}
 		$this->render_button();
 		$this->render_form_end();
-
 	}
 
 	public function render_form_begin(){
@@ -62,48 +61,42 @@ class Form {
 	}
 
 	public function render_form_end(){
-
+		//
 		echo "</form>";
 	}
 
 	public function render_button(){
-
+		//
 		echo "<button type=\"submit\" class=\"btn btn-default\" name=\"submit\" value=\"Upload\">Save</button>";
 	}
 
 	public function render_form_element($field, $value) {
-		// echo $field . "<br/>";
 		if( isset($this->validations[$field]["label"]) ) {
 			$label = $this->validations[$field]["label"];
 		} else {
 			$label = "No label";
 		}
 
-		// echo $this->validation_errors[$field];
-
-
-
+		if( isset($this->validations[$field]["type"]) ) {
+			$type = $this->validations[$field]["type"];
+		} else {
+			$type = "text";
+		}
 
 		if (array_key_exists ($field , $this->validation_errors)){
 			$error_text = $this->validation_errors[$field];
 			echo "<div class=\"form-group has-error has-feedback\">";
-			echo "<label for=\"{$field}\">{$label} <small>{$error_text}</small></label>";
-			echo "<input type=\"text\" class=\"form-control\" name=\"{$field}\" value=\"{$value}\"/>";
-			echo "<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>";
+			echo "<label for=\"{$field}\">{$label}</label>";
+			echo "<label class=\"text-danger\" for=\"{$field}\">&nbsp&nbsp**&nbsp{$error_text}</label>";
+			echo "<input type=\"{$type}\" class=\"form-control\" name=\"{$field}\" value=\"{$value}\"/>";
+			// echo "<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>";
 			echo "</div>";
 		} else {
 			echo "<div class=\"form-group\">";
 			echo "<label for=\"{$field}\">{$label}</label>";
-			echo "<input type=\"text\" class=\"form-control\" name=\"{$field}\" value=\"{$value}\"/>";
+			echo "<input type=\"{$type}\" class=\"form-control\" name=\"{$field}\" value=\"{$value}\"/>";
 			echo "</div>";
 		}
-
-
-
-
-
-
-
 	}
 
 	// populate class with POST elements
@@ -112,25 +105,15 @@ class Form {
 			$this->model_class->$field = $post_array[$field];
 			# Validate field according to rules
 			# And populate validation_array if found errors
-			
-			// $this->validate_field($field, $this->model_class->$field);
+			$this->validate_field($field, $this->model_class->$field);
 		}
 		return $this->model_class;
 	}
-
 
 	public function has_validation_errors() {
 		# Comment
 		return empty($this->validation_errors) ? false : true;
 	}
-
-	// public function validate_fields() {
-	// 	foreach ($this->fields as $field) {
-	// 		echo "Validating field " . $field . "<br/>";
-	// 		$this->validate_field( $field , $this->model_class->$field);
-	// 	}
-	// 	return true;
-	// }
 
 	public function validate_field( $field, $value) {
 		$validation_rules = $this->validations[$field];

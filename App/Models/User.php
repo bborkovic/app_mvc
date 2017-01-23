@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Core\Model;
+use Core\Session;
 
 class User extends Model {
 	
@@ -25,9 +26,6 @@ class User extends Model {
 	public $parents = array(
 		);
 
-
-
-
 	public $id;
 	public $username;
 	public $password;
@@ -37,6 +35,7 @@ class User extends Model {
 
 	public $validations = array(
 		"username" => array(
+			"type" => "text",
 			"label" => "Username",
 			"rule" => "alphaNumeric",
 			"required" => true,
@@ -46,6 +45,7 @@ class User extends Model {
 			"message" => "Username is not correct"
 			),
 		"password" => array(
+			"type" => "password",
 			"label" => "Password",
 			"rule" => "alphaNumeric",
 			"required" => true,
@@ -55,6 +55,7 @@ class User extends Model {
 			"message" => "Password is not correct"
 			),
 		"first_name" => array(
+			"type" => "text",
 			"label" => "First Name",
 			"rule" => "alphaNumeric",
 			"required" => false,
@@ -114,6 +115,16 @@ class User extends Model {
 		// returns full name if there is instance
 		return $this->first_name . " " . $this->last_name;
 	}
+
+	public static function get_logged_username() {
+		if(Session::is_logged_in()){
+			$user = User::find_by_id(Session::$user_id);
+			return $user->username;
+		} else {
+			return "";
+		}
+	}
+
 } // End of Class
 
 

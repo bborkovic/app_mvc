@@ -1,4 +1,4 @@
-<?php use Core\Session; ?>
+<?php use Core\Session; use App\Models\User; ?>
 
 <!DOCTYPE html>
 <html>
@@ -47,12 +47,12 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li><a href="<?php echo (Session::is_logged_in()) ? "/users/logout" : "/users/login"; ?>">
-          <?php echo (Session::is_logged_in()) ? "Logout" : "Login"; 
+          <?php echo (Session::is_logged_in()) ? "Logout" : "Login";
           ?>
           </a>
         </li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">bborkovic <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo User::get_logged_username(); ?><span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#">Action</a></li>
             <li><a href="#">Another action</a></li>

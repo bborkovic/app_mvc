@@ -6,6 +6,8 @@ namespace Core;
 
 use PDO;
 use App\Config;
+use \Exception;
+use \PDOException;
 
 class Database {
 	
@@ -27,7 +29,7 @@ class Database {
 			$conn = new PDO("mysql:host=".Config::DB_SERVER.";dbname=".Config::DB_NAME.";charset=utf8", Config::DB_USER, Config::DB_PASS);
 			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			die("Database connection failed " . $e->getMessage() );
 		}
 		$this->connection = $conn;
@@ -36,7 +38,7 @@ class Database {
 	public function query($sql) {
 		try {
 			$sth = $this->connection->query($sql);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			die("Database query failed ". $e->getMessage() );
 		}
 		return $sth;
@@ -52,10 +54,13 @@ class Database {
 		try {
 			$sth = $this->connection->prepare($sql);
 			$sth->execute($bind_array);
-		} catch (Exception $e) {
-			
-			$error->add_error($e->getMessage(), "class: Database, query_select_prepared");
-			return false;
+		} catch (\PDOException $e) {
+			$bind_array_text = var_export($bind_array,true);
+			throw new \PDOException("Error: The Database Query Failed! , " 
+				. "<br/>sql: " . $sql 
+				. "<br/>binds: " . $bind_array_text
+				. "<br/>" . $e->getMessage()
+			);
 		}
 		return $sth->fetchAll();
 	}
@@ -65,12 +70,14 @@ class Database {
 		try {
 			$sth = $this->connection->prepare($sql);
 			$sth->execute($bind_array);
-		} catch (Exception $e) {
-			$error->add_error($e->getMessage(), "class: Database, query_dml_prepared");
-			return false;
+		} catch (\PDOException $e) {
+			$bind_array_text = var_export($bind_array,true);
+			throw new \PDOException("Error: The Database Query Failed! , " 
+				. "<br/>sql: " . $sql 
+				. "<br/>binds: " . $bind_array_text
+				. "<br/>" . $e->getMessage()
+			);
 		}
-		// returns number of rows processed
-		// return $sth->rowCount();
 		return true;
 	}
 

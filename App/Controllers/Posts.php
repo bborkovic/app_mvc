@@ -30,7 +30,7 @@ class Posts extends \Core\Controller {
 				Session::message( ["New Post Created" , "success"]);
 				redirect_to('index');
 			} else {
-				Session::message( ["Error saving! " . $error->get_errors() , "success"]);
+				// exception is thrown
 			}
 		} 
 		// render view
@@ -46,14 +46,15 @@ class Posts extends \Core\Controller {
 
 		if(isset($_POST['submit'])) {
 			$post = $form->parsePost($_POST, true);
-			// var_dump($form);
-			// Save user to DB and display message if necessary
-			if($post->update()) {
-				Session::message(["Post saved!" , "success"]);
+
+			if( $form->has_validation_errors() ){
+				Session::message(["Validation errors!" , "info"]);
 			} else {
-				Session::message([ "Error saving! " . $error->get_errors() , "error"]);
+				if($post->update()) {
+					Session::message(["Post saved!" , "success"]);
+				} 
 			}
-		} 
+		}
 		View::render('Posts/edit.php', [ "form" => $form ] );
 	}
 

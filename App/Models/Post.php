@@ -12,7 +12,28 @@ class Post extends Model {
 	public static $primary_keys = array('id');
 	// columns of table users
 	
-	public $validations = array();
+	public $validations = array(
+		"name" => array(
+			"type" => "text",
+			"label" => "Name",
+			"rule" => "alphaNumeric",
+			"required" => true,
+			"allowEmpty" => false,
+			"maxlength" => 20,
+			"minlength" => 5,
+			"message" => "Name is not set"
+			),
+		"details" => array(
+			"type" => "text",
+			"label" => "Details",
+			"rule" => "alphaNumeric",
+			"required" => true,
+			"allowEmpty" => false,
+			"maxlength" => 20,
+			"minlength" => 5,
+			"message" => "Name is not set"
+			),
+	);
 
 	public $children = array(
 		'Ad' => array( // Class Name

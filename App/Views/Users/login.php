@@ -2,7 +2,7 @@
 
 
 <div class="panel-body">
-
+	<?php echo output_message(); ?>
 	<div class="row">
 
 	<!-- Side navigation -->
