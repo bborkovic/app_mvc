@@ -50,8 +50,12 @@ class ResizeImages {
 				$size = getimagesize( $this->images[$i]['file'] );
 				if( $size === false && $this->webpSupported && mime_content_type($this->images[$i]['file']) == 'image/webp'){
 					$this->images[$i] = $this->getWebpDetails( $this->images[$i]['file'] );
-				} elseif( $size[0] === 0 ) {
-					
+				} elseif( $size[0] === 0 || !in_array($size['mime'] , $this->mimeTypes)) {
+					$this->ivalid[] = $this->images[$i]['file'];
+				} else {
+					if($size['mime'] == 'image/jpeg') {
+						//
+					}
 				}
 			} else {
 				$this->invalid[] = $this->images[$i]['file'];
