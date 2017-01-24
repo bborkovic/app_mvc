@@ -2,21 +2,12 @@
 error_reporting(E_ALL ^ E_DEPRECATED);
 ini_set('display_errors', 1);
 
-if(extension_loaded('gd')) {
-	echo "<pre>";
-	print_r(gd_info());
-	echo "</pre>";
-}
-else {
-	echo 'GD is not available.';
-}
+$a = "5";
+$b = 5;
 
-if(extension_loaded('imagick')) {
-	$imagick = new Imagick();
-	print_r($imagick->queryFormats());
-}
-else {
-	echo 'ImageMagick is not available.';
-}
+
+echo ($a == $b) ? "== is True" : "== is False";
+echo "<br/>";
+echo ($a === $b) ? "=== is True" : "=== is False";
 
 ?>
