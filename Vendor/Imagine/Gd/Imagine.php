@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Imagine\Gd;
+namespace Imagine\Gd; 
 
 use Imagine\Image\AbstractImagine;
 use Imagine\Image\Metadata\MetadataBag;
