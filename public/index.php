@@ -3,19 +3,9 @@
 	error_reporting(E_ALL ^ E_DEPRECATED);
 	ini_set('display_errors', 1);
 
-	# Instantiate DB class
-	require_once '../Core/functions.php';
-	require_once '../Core/Session.php';
-	Core\Session::session_start();
+	require_once '../Core/initialize.php';
 
-	spl_autoload_register( function($class) {
-		$root = dirname(__DIR__); // get the parent directory
-		$file = $root . '/' . str_replace('\\','/', $class) . '.php'; // get php file of class
-		if( is_readable($file)) {
-			require $file;
-			// require $root . '/' . str_replace('\\','/', $class) . '.php';
-		}
-	});
+	Core\Session::session_start();
 
 	set_error_handler('Core\Error::errorHandler');
 	set_exception_handler('Core\Error::exceptionHandler');

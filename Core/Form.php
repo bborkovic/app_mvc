@@ -144,6 +144,9 @@ class Form {
 
 }
 
+$var = 1000;
+echo "Ovo je drugi nacin da se to vidi";
+
 
 
 ?>

@@ -131,8 +131,9 @@ class Session {
 		return $current_url;
 	}
 
-}
 
+}
+$var = 100;
 // $session = new Session();
 
 ?>

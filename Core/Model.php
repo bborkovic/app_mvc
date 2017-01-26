@@ -5,12 +5,13 @@ namespace Core;
 class Model {
 
 
-	// static field that must be changed in every class
+	// static field that must(can) be changed in every class
 	protected static $table_name = "dummy";
 	protected static $db_fields = array('id', 'dummy' ); // database columns
+   public static $model_namespace = 'App\\Models\\';
 	// 
-
 	// database columns:
+
 	public $id;
 	public $created_at; // saved in db as unsigned integers
 	public $updated_at; // saved in db as unsigned integers
@@ -121,28 +122,24 @@ class Model {
 	}
 
 	public function get_children($child_class_name) {
-		
-		$child_table_name = $child_class_name::$table_name;
-		// or
-		// $child_table_name = $this->children[$child_class_name]['table_name']
-		
-		// $foreign_key_name = strtolower( get_class($this) ) . "_id";
-		$foreign_key_name = $this->children[$child_class_name]['foreign_key'];
+		$child_namespaced_class_name = static::$model_namespace . $child_class_name;
+		$child_table_name = $child_namespaced_class_name::$table_name;
+        $foreign_key_name = $this->children[$child_class_name]['foreign_key'];
 
 
 		// echo $child_class_name . " " . $child_table_name . " " . $foreign_key_name;
 		$sql = "select * from {$child_table_name} where {$foreign_key_name} = :{$foreign_key_name}";
-		$child_objects = $child_class_name::find_by_sql($sql,[$foreign_key_name => $this->id]);
+		$child_objects = $child_namespaced_class_name::find_by_sql($sql,[$foreign_key_name => $this->id]);
 		return $child_objects;
 	}
 
 	public function get_parent($parent_class_name) {
-		
-		$parent_table_name = $parent_class_name::$table_name;
+      $parent_namespaced_table_name = static::$model_namespace . $parent_class_name;
+		$parent_table_name = $parent_namespaced_table_name::$table_name;
 		$foreign_key_name = $this->parents[$parent_class_name]['foreign_key'];
 		// echo $child_class_name . " " . $child_table_name . " " . $foreign_key_name;
 		$sql = "select * from {$parent_table_name} where {$foreign_key_name} = :{$foreign_key_name}";
-		$parent = $parent_class_name::find_by_id($this->$foreign_key_name);
+		$parent = $parent_namespaced_table_name::find_by_id($this->$foreign_key_name);
 		return $parent;
 	}
 

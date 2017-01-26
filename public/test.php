@@ -1,32 +1,29 @@
-<?php 
+<?php
 
-error_reporting(E_ALL ^ E_DEPRECATED);
-ini_set('display_errors', 1);
+	error_reporting(E_ALL ^ E_DEPRECATED);
+	ini_set('display_errors', 1);
 
-require_once '../App/Config.php';
-require_once '../Core/functions.php';
-require_once '../Core/Session.php';
-require_once '../Core/Error.php';
-require_once '../Core/Database.php';
-require_once '../Core/Model.php';
-require_once '../App/Models/User.php';
-require_once '../App/Models/Post.php';
-use App\Models\User;
-use Core\Session;
-Session::session_start();
+	require_once '../Core/initialize.php';
 
+	set_error_handler('Core\Error::errorHandler');
+	set_exception_handler('Core\Error::exceptionHandler');
 
-// $user = User::find_by_id(1);
-// Session::login($user);
+	use App\Models\User;
+	$user = User::find_by_id(1);
 
-Session::logout();
+	$ads = $user->get_children("Ad");
 
-echo "***";
-echo User::get_logged_username();
-echo "***";
+	foreach ($ads as $ad) {
+		echo "<br/>" . $ad->title;
+	}
 
-echo Session::$user_id;
+	// $ads = $user->get_children("Ad");
 
-echo "The end of script";
+	// echo count($ads);
+
+	echo "<br/>" . " End of script";
+	
 
 ?>
+
+
