@@ -5,9 +5,9 @@ namespace App;
 class Config {
 
 	const DB_SERVER = 'localhost';
-	const DB_USER = 'njuskalo';
-	const DB_PASS = 'njuskalo';
-	const DB_NAME = 'njuskalo';
+	const DB_USER = 'bookstore';
+	const DB_PASS = 'bookstore';
+	const DB_NAME = 'bookstore';
 
 }
 
