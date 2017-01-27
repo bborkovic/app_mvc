@@ -76,6 +76,24 @@ class Model {
 		}
 	}
 
+
+	public static function find_by_sql_assocc($sql="", $bind_array=[], $key, $value) {
+		// global $database;
+		$database = static::getDB();
+		$records = $database->query_select_prepared($sql , $bind_array);
+		if($records) {
+			$object_array = [];
+			foreach ($records as $record) {
+				$object_array[$record[$key]] = $record[$value];
+				// $object_array[] = static::instantiate($record);
+			}
+			return $object_array;
+		} else {
+			return [];
+		}
+	}
+
+
 	public static function find_by_id($id=0) {
 		// use method find_by_sql
 		$result = static::find_by_sql("select * from " . static::$table_name . " where id = :id limit 1" , [":id"=>$id]);

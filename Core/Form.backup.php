@@ -4,48 +4,24 @@ namespace Core;
 
 class Form {
 
-	// name of the class
 	public $model_class_name;
-
-	// object
 	public $model_class;
-
-	// array, list of fields to display in form
 	public $fields;
-
-	// array or fields of type select [ "cust_id"=>[ "value1"=>"display value1" , "value2"=>"display value2" ] ]
-	protected $fields_select = [];
-
-	// array or fields of type radio [ "cust_id"=>[ "value1"=>"display value1" , "value2"=>"display value2" ] ]
-	protected $fields_radio = [];
-
-	protected $model_namespace = 'App\\Models\\';
-
-	// form method, post or get
-	protected $method = "post";
-
-	// link to form action
+	public $method;
 	public $action;
-
-	// ?
 	public $validations;
-
-	// ?
 	public $field_types = array(
 		"alphaNumeric" => "text"
 		);
-
-	// validation errors, should be empty to insert/update
+	
 	public $validation_errors = array();
 
 	function __construct($class_name, $fields=[]){
 		if(is_object($class_name)) {
-		    // if it's object use it
 			$this->model_class = $class_name;
 			$this->model_class_name = get_class($class_name);
 		} else {
-            // instantiate new Model
-			$model = $this->model_namespace . $class_name;
+			$model = "App\Models\\$class_name";
 			$this->model_class = new $model;
 			$this->model_class_name = $class_name;
 		}
@@ -60,16 +36,6 @@ class Form {
 		$this->validations = $this->model_class->validations;
 	}
 
-	public function setFieldsRadio($fields_radio) {
-		//
-		$this->fields_radio[] = $fields_radio;
-	}
-
-	public function setFieldsSelect($field_name, $field_values) {
-		//
-		$this->fields_select[$field_name] = $field_values;
-	}
-
 	public function render() {
 
 		$return_html = "";
@@ -77,17 +43,13 @@ class Form {
 		$this->render_form_begin();
 
 		foreach ($this->fields as $field) {
+
 			if( isset($this->model_class->$field)) {
 				$value = $this->model_class->$field;
 			} else {
 				$value = "";
 			}
-
-			if(isset($this->fields_select[$field])) {
-				$this->render_form_element_select($field, $value);
-			} else {
-				$this->render_form_element($field, $value);
-			}
+			$this->render_form_element($field, $value);
 		}
 		$this->render_button();
 		$this->render_form_end();
@@ -106,18 +68,6 @@ class Form {
 	public function render_button(){
 		//
 		echo "<button type=\"submit\" class=\"btn btn-default\" name=\"submit\" value=\"Upload\">Save</button>";
-	}
-
-	public function render_form_element_select($field, $value) {
-		$label = $this->validations[$field]["label"];
-
-		echo "<label for=\"select\">Select Author:</label>";
-		echo "<select class=\"form-control\" id=\"select\" name=\"$field\">";
-		foreach ($this->fields_select[$field] as $db_id => $display_value) {
-			$selected = ( $value == $db_id ) ? "selected" : "";
-			echo "<option value=\"$db_id\" $selected>$display_value</option>";
-		}
-		echo "</select>";
 	}
 
 	public function render_form_element($field, $value) {

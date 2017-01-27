@@ -12,6 +12,16 @@ class Book extends Model {
 	public static $primary_keys = array('id', 'author_id');
 	
 	public $validations = array(
+		"author_id" => array(
+			"type" => "drop",
+			"label" => "Author Name",
+			"rule" => "alphaNumeric",
+			"required" => true,
+			"allowEmpty" => false,
+			"maxlength" => 20,
+			"minlength" => 5,
+			"message" => "Name is not set"
+			),
 		"name" => array(
 			"type" => "text",
 			"label" => "Book Name",
@@ -24,7 +34,37 @@ class Book extends Model {
 			),
 		"short_info" => array(
 			"type" => "text",
-			"label" => "Book Info",
+			"label" => "Short Info",
+			"rule" => "alphaNumeric",
+			"required" => true,
+			"allowEmpty" => false,
+			"maxlength" => 20,
+			"minlength" => 5,
+			"message" => "Name is not set"
+			),
+		"about_book" => array(
+			"type" => "text",
+			"label" => "About Book",
+			"rule" => "alphaNumeric",
+			"required" => true,
+			"allowEmpty" => false,
+			"maxlength" => 20,
+			"minlength" => 5,
+			"message" => "Name is not set"
+			),
+		"about_book" => array(
+			"type" => "text",
+			"label" => "About Book",
+			"rule" => "alphaNumeric",
+			"required" => true,
+			"allowEmpty" => false,
+			"maxlength" => 20,
+			"minlength" => 5,
+			"message" => "Name is not set"
+			),
+		"about_authors" => array(
+			"type" => "text",
+			"label" => "About Author",
 			"rule" => "alphaNumeric",
 			"required" => true,
 			"allowEmpty" => false,

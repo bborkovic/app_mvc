@@ -1,6 +1,13 @@
-      <div class="panel-footer">copyright &copy Bookstore <?php echo date("Y"); ?></div>
-    </div>
-  </div>
+	</div> <!-- class="row"-->
+</div> <!-- class="container"-->
+
+
+<footer>
+	<div class="container">
+		<p>copyright &copy Bookstore <?php echo date("Y"); ?></p>
+	</div>
+</footer>
+
 
 </body>
 </html>

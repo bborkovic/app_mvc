@@ -32,7 +32,6 @@ class Users extends \Core\Controller {
 		} 
 		$form = new Form("User", ["username", "password"]);
 		$form->action = "login";
-		$form->method = "post";
 		View::render('Users/login.php', ["form" => $form , "message" => $message] );
 	}
 

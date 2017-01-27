@@ -47,7 +47,9 @@ class Author extends Model {
 	public $last_name;
 	public $about;
 
-
+	public function getFullName() {
+		return $this->first_name . " " . $this->last_name;
+	}
 
 } // End of Class
 

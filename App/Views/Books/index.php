@@ -1,35 +1,34 @@
 <?php require_once('layouts/header.php'); ?>
 
-
-<div class="panel-body">
-
+<!-- Content -->
+<div class="col-md-8">
 	<?php echo output_message(); ?>
+	<!-- <h4>This is body of view</h4> -->
 
-	<div class="row">
-
-	<!-- Side navigation -->
-		<div class="col-sm-2">
-			<p><a href=""></a></p>
-			<p><a href="/books/index">Books</a></p>
-		</div>
-
-		<div class="col-sm-10">
-
+	<div id="books-index">
+	<!-- loop through rows of books -->
+		<?php for ($i=0; $i <= count($books)-1; $i++): ?> 
 			<div class="row">
-				<?php foreach ($books as $book): ?>
-					<div class="col-xs-4">
-						<img class="img-responsive" src="/uploads/books/<?php echo $book->book_photo; ?>">
+				<!-- loop through columns of books -->
+				<?php foreach ($books[$i] as $book): ?>
+					<div class="col-md-3">
+						<img src="/uploads/books/<?php echo $book->book_photo; ?>">
+						<h4><?php echo $book->name; ?></h4>
 					</div>
-				<?php endforeach; ?>
-
+				<?php endforeach ?>
 			</div>
+		<?php endfor; ?>
 
 
-			
-		</div>
 	</div>
 </div>
 
+<!-- right sidebar -->
+<div class="col-md-1"></div>
+
+<div class="col-md-3">
+	<?php require_once('layouts/sidebar.php'); ?>
+</div>
 
 
 
