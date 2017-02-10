@@ -112,6 +112,7 @@ class Session {
 	}
 
 	public static function get_latest_url() {
+		// latest url <> current_url
 		$current_url = static::$url[0];
 		foreach (static::$url as $url) {
 			if($url != $current_url){
@@ -133,7 +134,7 @@ class Session {
 
 
 }
-$var = 100;
+// $var = 100;
 // $session = new Session();
 
 ?>

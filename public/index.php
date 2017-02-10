@@ -17,6 +17,7 @@
 	$router->add('{controller}/{action}');
 	$router->add('{controller}/{id:\d+}/{action}');
 	$router->add('admin/{controller}/{action}', ['namespace'=>'Admin'] );
+	$router->add('admin/{controller}/{id:\d+}/{action}', ['namespace'=>'Admin'] );
 
 	# !! Run controllers that are needed
 	$router->dispatch($url);

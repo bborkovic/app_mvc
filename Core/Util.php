@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use App\Models\User;
+
 class Util {
 
 	public static function obj2hash( &$objects , $field1 , $field2) {
@@ -36,6 +38,20 @@ class Util {
 			$return_hash[ $key ] = $val;
 		}
 		return $return_hash;
+	}
+
+	public static function get_default_messages( $additional_params=[] ) {
+		// returns array of default options passed from controller to view
+		$arr = [];
+		$arr["username"] = User::get_logged_username();
+		$arr["message"] = get_message();
+
+		if(!empty($additional_params)) {
+			return array_merge ($arr , $additional_params);
+		} else {
+			return $arr;
+		}
+		
 	}
 
 }

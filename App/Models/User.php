@@ -51,7 +51,7 @@ class User extends Model {
 			"required" => true,
 			"allowEmpty" => false,
 			"maxlength" => 20,
-			"minlength" => 2,
+			"minlength" => 5,
 			"message" => "Password is not correct"
 			),
 		"first_name" => array(

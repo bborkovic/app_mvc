@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use Core\View;
 use Core\Form;
+use Core\Util;
 use Core\Session;
 use App\Models\User;
 use App\Models\Author;
@@ -15,48 +16,62 @@ class Authors extends \Core\Controller {
 		//
 		// echo "Hello from Namespace: Admin, Controller: Authors, Action: index";
 
-		View::render('Admin/Authors/index.php');
+		$authors = Author::find_all();
+		View::renderTemplate('Admin/Authors/index.html' , array(
+			"authors" => $authors,
+			"messages" => Util::get_default_messages( array("page_title" => "Admin/Authors")),
+			)
+		);
 	}
 
 	public function addNewAction() {
-		// message("Hello from Controller: " . get_class($this) . ", Action: addNew()", "success");
 		
-		// $form = new Form("Post", ["name" , "details"]);
-		// $form->action = "add-new";
-		// $form->method = "post";
+		$form = new Form("Author", ["first_name" , "last_name"]);
 
-		// if(isset($_POST['submit'])) {
-		// 	$post = $form->parsePost($_POST, true); // get post from parsed $_POST
-		// 	if($post->create()) {
-		// 		Session::message( ["New Post Created" , "success"]);
-		// 		redirect_to('index');
-		// 	} else {
-		// 		// exception is thrown
-		// 	}
-		// } 
+		if(isset($_POST['submit'])) {
+			$author = $form->parsePost($_POST, true); // get post from parsed $_POST
+			
+			if( $form->has_validation_errors() ){
+				Session::message(["Validation errors!" , "error"]);
+			} else {
+				if($author->create()) {
+					Session::message(["Post saved!" , "success"]);
+					redirect_to('index');
+				} else {
+					// Exception will be thrown
+				}
+			}
+		} 
 		// // render view
-		// View::render('Posts/add-new.php', [ "form" => $form ] );
+		View::renderTemplate('Admin/Authors/new.html', array(
+			"form" => $form,
+			"messages" => Util::get_default_messages( array("page_title" => "Admin/Authors") ),
+			) 
+		);
 	}
 
 	public function editAction() {
-		// global $session;
-		// $post = Post::find_by_id( $this->route_params['id'] );
-		// $form = new Form($post, ["name" , "details"]);
-		// $form->action = "edit";
-		// $form->method = "post";
 
-		// if(isset($_POST['submit'])) {
-		// 	$post = $form->parsePost($_POST, true);
+		$author = Author::find_by_id( $this->route_params['id'] );
+		$form = new Form($author, ["first_name" , "last_name"]);
+		
+		if(isset($_POST['submit'])) {
+			$post = $form->parsePost($_POST, true);
 
-		// 	if( $form->has_validation_errors() ){
-		// 		Session::message(["Validation errors!" , "info"]);
-		// 	} else {
-		// 		if($post->update()) {
-		// 			Session::message(["Post saved!" , "success"]);
-		// 		} 
-		// 	}
-		// }
-		// View::render('Posts/edit.php', [ "form" => $form ] );
+			if( $form->has_validation_errors() ){
+				Session::message(["Validation errors!" , "error"]);
+			} else {
+				if($post->update()) {
+					Session::message(["Post saved!" , "success"]);
+				}
+			}
+		}
+
+		View::renderTemplate('Admin/Authors/edit.html', array(
+			"form" => $form,
+			"messages" => Util::get_default_messages( array("page_title" => "Admin/Authors") ),
+			) 
+		);
 	}
 
 	public function deleteAction() {
@@ -69,9 +84,8 @@ class Authors extends \Core\Controller {
 		// }
 	}
 
-
 	protected function before() {
-		if( !Session::is_logged_in() and $this->route_params['action'] != 'index'){
+		if( !Session::is_logged_in()){
 			redirect_to('/users/login');
 		}
 	}

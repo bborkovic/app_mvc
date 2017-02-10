@@ -12,7 +12,6 @@ use App\Models\User;
 class Users extends \Core\Controller {
 	
 	public function login() {
-		global $session;
 		// message("Hello from Controller: " . get_class($this) . ", Action: login()", "success");
 		$message = "";
 		if( isset($_POST['submit'])) {
@@ -23,16 +22,20 @@ class Users extends \Core\Controller {
 			$found_user = User::authenticate( $username, $password );
 			if($found_user) {
 				Session::login($found_user);
-				// echo "You are logged in";
+				Session::message( array("You are logged in!","success") );
 				redirect_to('/' . Session::get_latest_url_not_like('logout'));
 			} else {
-				$message = "Username/Password combination not corrent";
+				Session::message( array("Username/password combination not correct!","error") );
 			}
 
 		} 
 		$form = new Form("User", ["username", "password"]);
-		$form->action = "login";
-		View::render('Users/login.php', ["form" => $form , "message" => $message] );
+		$form->action = "/users/login";
+		View::renderTemplate('Users/login.html', array(
+			"form" => $form ,
+			"message" => get_message(),
+			) 
+		);
 	}
 
 	public function logout() {

@@ -19,7 +19,7 @@ class Author extends Model {
 			"required" => true,
 			"allowEmpty" => false,
 			"maxlength" => 20,
-			"minlength" => 5,
+			"minlength" => 2,
 			"message" => "Name is not set"
 			),
 		"last_name" => array(
@@ -29,7 +29,7 @@ class Author extends Model {
 			"required" => true,
 			"allowEmpty" => false,
 			"maxlength" => 20,
-			"minlength" => 5,
+			"minlength" => 2,
 			"message" => "Name is not set"
 			),
 	);

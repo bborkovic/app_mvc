@@ -34,10 +34,11 @@ class Books extends \Core\Controller {
 
 	public function show() {
 		$book = Book::find_by_id( $this->route_params['id'] );
-		View::render('Books/show.php', [
+		View::renderTemplate('Books/show.html', array(
 				"book" => $book,
 				"add_links" => [],
-			]);
+			)
+		);
 	}
 
 	public function addNewAction() {

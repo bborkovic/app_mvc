@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>BookStore | {{ page_title }}</title>
+		<title>BookStore | {{ messages.page_title }}</title>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<!-- Bootstrap -->
-		<script src="../javascripts/jquery-3.1.0.min.js"></script>
-		<script src="../javascripts/bootstrap.min.js"></script>
-		<link href="../stylesheets/bootstrap.min.css" rel="stylesheet">
-		<link href="../stylesheets/application.css" rel="stylesheet">
+		<script src="/javascripts/jquery-3.1.0.min.js"></script>
+		<script src="/javascripts/bootstrap.min.js"></script>
+		<link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+		<link href="/stylesheets/application.css" rel="stylesheet">
 	</head>
 
 
@@ -45,9 +45,15 @@
 					</ul>
 
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="#">Link</a></li>
+						<li>
+							{% if messages.username %}
+								<a href="/users/logout">Logout</a>
+							{% else %}
+								<a href="/users/login">Login</a>
+							{% endif %}
+						</li>
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ messages.username }}<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="#">Action</a></li>
 								<li><a href="#">Another action</a></li>
@@ -65,7 +71,7 @@
 
 		<header>
 			<div class="container">
-				<h1>The BookStore, </h1>
+				<h1>The BookStore, <small>{{ messages.page_title }}</small></h1>
 			</div>
 		</header>
 
@@ -74,7 +80,7 @@
 				<div class="row">
 					<div class="col-md-9">
 						<!-- Main Content !!-->
-						{{ message | raw }}
+						{{ messages.message | raw }}
 						{% block body %}
 						{% endblock %}
 					</div>

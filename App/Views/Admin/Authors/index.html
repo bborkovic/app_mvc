@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+	<div id="authors-index">
+		<table class="table">
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Actions</th>
+			{% for author in authors %}
+				<tr>
+					<td>{{ author.first_name }}</td>
+					<td>{{ author.last_name }}</td>
+					<td>
+						<a href="{{ author.id }}/edit">Edit</a> | 
+						<a href="{{ author.id }}/delete">Delete</a>
+					</td>
+				</tr>
+			{% endfor  %}
+		</table>
+		<a href="add-new">
+			<button type="button" class="btn btn-primary btn-md">New Author</button>
+		</a>
+	</div>
+
+<!-- 	<div class="center-block" text-align="center">
+		{{ paginator.displayPagination('') | raw }}
+	</div> -->
+
+{% endblock %}
+
+
+
+{% block sidebar %}
+	<div id="sidebar">
+		<h3>Links:</h3>
+		<ul class="list-group">
+			<a href="/books/index"><li class="list-group-item">Books</li></a>
+			<a href="/publishers/index"><li class="list-group-item">Publishers</li></a>
+			<a href="/authors/index"><li class="list-group-item">Authors</li></a>
+		</ul>
+	</div>
+{% endblock %}
