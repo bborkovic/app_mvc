@@ -71,7 +71,7 @@ class Router {
 				} 
 			} else {
 				// message("Error: Controller class ' . $controller . ' not found", "error");
-				throw new \Exception("Error: Controller class ' . $controller . ' not found");
+				throw new \Exception("Error: Controller class " . $controller . " not found");
 			}
 		} else {
 			// message("Error: The URL $url does not match", "error");

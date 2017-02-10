@@ -61,7 +61,7 @@ class Paginator {
 		return $this->next_page() <= $this->totol_pages() ? true : false;
 	}
 
-	function displayPagination($page_url) { 
+	public function displayPagination($page_url) { 
 		// moze se malo prepraviti
 		$item_per_page = $this->per_page;
 		$current_page = $this->current_page;

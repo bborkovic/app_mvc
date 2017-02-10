@@ -68,7 +68,6 @@ class Posts extends \Core\Controller {
 		}
 	}
 
-
 	protected function before() {
 		if( !Session::is_logged_in() and $this->route_params['action'] != 'index'){
 			redirect_to('/users/login');

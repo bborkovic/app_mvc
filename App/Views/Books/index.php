@@ -13,14 +13,21 @@
 				<?php foreach ($books[$i] as $book): ?>
 					<div class="col-md-3">
 						<img src="/uploads/books/<?php echo $book->book_photo; ?>">
+						<a href="<?php echo $book->id; ?>/show">
+							<button type="button" class="btn btn-primary btn-md">Read More</button>
+						</a>
 						<h4><?php echo $book->name; ?></h4>
 					</div>
 				<?php endforeach ?>
 			</div>
 		<?php endfor; ?>
+	</div>
 
+	<div class="center-block" text-align="center">
+		<?php echo $paginator->displayPagination('') ?>
 
 	</div>
+
 </div>
 
 <!-- right sidebar -->

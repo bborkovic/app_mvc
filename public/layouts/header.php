@@ -17,10 +17,8 @@
     <h1>The BookStore, <small>Wellcome!</small></h1>
   </header> -->
 
+
 <body>
-<?php require 'navbar.php'; ?>
-
-
-
-<div class="container">
-  <div class="row">
+	<div class="container">
+		<div class="row">
+		<?php require 'navbar.php'; ?>

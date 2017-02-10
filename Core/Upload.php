@@ -77,6 +77,10 @@ class Upload {
 		return $this->messages;
 	}
 
+	public function getName() {
+		return $this->newName;
+	}
+
 	protected function check_file($file){
 		if( $file['error' ] != 0){
 			$this->get_error_message($file);
@@ -222,6 +226,7 @@ class Upload {
 			return number_format($bytes, 1) . ' KB';
 		}
 	}
+
 }
 
 

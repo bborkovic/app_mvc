@@ -14,7 +14,11 @@ class Authors extends \Core\Controller {
 	public function indexAction() {
 		//
 		$authors = Author::find_all();
-		View::render('Authors/index.php', ["authors" => $authors] );
+		View::renderTemplate('Authors/index.html', array(
+			"authors" => $authors , 
+			"var" => '101var101',
+			"name" => 'Boris')
+		);
 	}
 
 	public function addNewAction() {

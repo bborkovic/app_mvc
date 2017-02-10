@@ -1,5 +1,5 @@
 body {
-    padding-top: 70px;
+    padding-top: 50px;
     font-family: 'Arial', sans-serif;
     font-size: 14px;
     color: #666;
@@ -11,6 +11,11 @@ header {
 	color: #fff;
 	height: 80px;
 	maring-bottom: 20px;
+}
+
+
+section {
+	padding-top: 20px;
 }
 
 footer {
@@ -29,10 +34,12 @@ footer {
 
 
 #books-index img {
+	margin-top: 20px;
 	width: 100;
 	padding: 3px;
 	border: 1px #ccc solid;
 	max-height: 200px;
+	margin-bottom: 5px;
 }
 
 #books-index h3{
@@ -40,7 +47,7 @@ footer {
 }
 
 #books-show {
-
+	vertical-align: text-top;
 }
 
 #books-show img {
@@ -50,3 +57,7 @@ footer {
 	max-width: 400px;
 
 }
+
+/*#books-show table, th, td {
+	border: 1px solid black;
+}*/

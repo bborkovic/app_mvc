@@ -94,7 +94,7 @@ class Form {
 	}
 
 	public function render_form_begin(){
-
+		//
 		echo "<form role=\"form\" action=\"{$this->action}\" method=\"{$this->method}\">";
 	}
 

@@ -15,62 +15,30 @@ class Book extends Model {
 		"author_id" => array(
 			"type" => "drop",
 			"label" => "Author Name",
-			"rule" => "alphaNumeric",
-			"required" => true,
-			"allowEmpty" => false,
-			"maxlength" => 20,
-			"minlength" => 5,
-			"message" => "Name is not set"
 			),
 		"name" => array(
 			"type" => "text",
 			"label" => "Book Name",
-			"rule" => "alphaNumeric",
-			"required" => true,
-			"allowEmpty" => false,
-			"maxlength" => 20,
-			"minlength" => 5,
-			"message" => "Name is not set"
 			),
 		"short_info" => array(
 			"type" => "text",
 			"label" => "Short Info",
-			"rule" => "alphaNumeric",
-			"required" => true,
-			"allowEmpty" => false,
-			"maxlength" => 20,
-			"minlength" => 5,
-			"message" => "Name is not set"
 			),
 		"about_book" => array(
 			"type" => "text",
 			"label" => "About Book",
-			"rule" => "alphaNumeric",
-			"required" => true,
-			"allowEmpty" => false,
-			"maxlength" => 20,
-			"minlength" => 5,
-			"message" => "Name is not set"
 			),
 		"about_book" => array(
 			"type" => "text",
 			"label" => "About Book",
-			"rule" => "alphaNumeric",
-			"required" => true,
-			"allowEmpty" => false,
-			"maxlength" => 20,
-			"minlength" => 5,
-			"message" => "Name is not set"
 			),
 		"about_authors" => array(
 			"type" => "text",
 			"label" => "About Author",
-			"rule" => "alphaNumeric",
-			"required" => true,
-			"allowEmpty" => false,
-			"maxlength" => 20,
-			"minlength" => 5,
-			"message" => "Name is not set"
+			),
+		"book_photo" => array(
+			"type" => "text",
+			"label" => "Book Photo",
 			),
 	);
 

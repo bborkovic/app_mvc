@@ -3,29 +3,41 @@
 namespace App\Controllers;
 
 use Core\View;
-use Core\Form;
-use Core\Util;
-use Core\Session;
-use App\Models\User;
-use App\Models\Book;
-use App\Models\Author;
-use Core\Paginator;
+	use Core\Form;
+	use Core\Util;
+	use Core\Upload;
+	use Core\Session;
+	use App\Config;
+	use App\Models\User;
+	use App\Models\Book;
+	use App\Models\Author;
+	use Core\Paginator;
 
 class Books extends \Core\Controller {
 	
 	public function indexAction() {
-		$page = ( isset($this->route_params['page'])) ? $this->route_params['page'] : 1;
-		$paginator = new Paginator($page, 12, 7);
+
+		// Session::message( array( "poruka", "success" ));
+
+		$page = (isset($_GET['page'])) ? $_GET['page'] : 1;
+		$paginator = new Paginator($page, 8, Book::count_all() );
 		$books = array_chunk( $paginator->getModelData("Book") , 4 );
-		View::render('Books/index.php', [ 
+		View::renderTemplate('Books/index.html', array(
 				"books" => $books,
-				"add_links" => ["Add new Book" => '/books/add-new']
-			]);
+				"add_links" => ["Add new Book" => '/books/add-new'],
+				"paginator" => $paginator,
+				"message" => get_message(),
+				"page_title" => "Book Index"
+			)
+		);
 	}
 
 	public function show() {
 		$book = Book::find_by_id( $this->route_params['id'] );
-		View::render('Books/show.php', ["book" => $book] );
+		View::render('Books/show.php', [
+				"book" => $book,
+				"add_links" => [],
+			]);
 	}
 
 	public function addNewAction() {
@@ -38,10 +50,10 @@ class Books extends \Core\Controller {
 		$form->setFieldsSelect( "author_id" , $authors_hash );
 
 		if(isset($_POST['submit'])) {
-			$post = $form->parsePost($_POST, true); // get post from parsed $_POST
-			if($post->create()) {
+			$book = $form->parsePost($_POST, true); // get book from parsed $_POST
+			if($book->create()) {
 				Session::message( ["New Book Created" , "success"]);
-				redirect_to('/books/index');
+				redirect_to("/books/{$book->id}/edit");
 			} else {
 				// exception is thrown
 			}
@@ -54,24 +66,38 @@ class Books extends \Core\Controller {
 	}
 
 	public function editAction() {
-		// global $session;
-		// $post = Post::find_by_id( $this->route_params['id'] );
-		// $form = new Form($post, ["name" , "details"]);
-		// $form->action = "edit";
-		// $form->method = "post";
+		
+		$authors = Author::find_all();
+		$authors_hash = Util::obj2hash( $authors , "id", "getFullName");
 
-		// if(isset($_POST['submit'])) {
-		// 	$post = $form->parsePost($_POST, true);
+		$book = Book::find_by_id( $this->route_params['id'] );
+		$form = new Form( $book , [ "author_id", "name", "short_info", "about_book", "about_authors", "book_photo" ]);
+		$form->action = "edit";
+		$form->setFieldsSelect( "author_id" , $authors_hash );
 
-		// 	if( $form->has_validation_errors() ){
-		// 		Session::message(["Validation errors!" , "info"]);
-		// 	} else {
-		// 		if($post->update()) {
-		// 			Session::message(["Post saved!" , "success"]);
-		// 		} 
-		// 	}
-		// }
-		// View::render('Posts/edit.php', [ "form" => $form ] );
+		if(isset($_POST['submit'])) {
+			$book = $form->parsePost($_POST);
+			if($book->update()) {
+				Session::message(["Book modified!" , "success"]);
+			} else {
+				// Exception will be thrown
+			}
+		}
+		if(isset($_POST['upload'])) {
+			$destination = Config::SITE_ROOT . '/uploads/books';
+			$upload = new Upload($destination);
+			$upload->set_max_size(1000000);
+			$upload->upload();
+			$result = $upload->get_messages();
+			if( strpos( $result[0] , "was uploaded successfully") ) {
+				Session::message( [ 'Image was uploaded!<br/>File name = "' . $upload->getName() . '"', "success"] );
+				// if success, add file_name to form for save
+				$form->model_class->book_photo = $upload->getName();
+			} else {
+				Session::message( [ join(', ', $result) , "error"] );
+			}
+		}
+		View::render('Books/edit.php', [ "form" => $form ] );
 	}
 
 	public function deleteAction() {

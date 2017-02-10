@@ -36,6 +36,15 @@ CREATE TABLE books
 	FOREIGN key ( author_id) references authors(id)
 );
 
+CREATE TABLE publishers
+(
+	id int(11) NOT NULL AUTO_INCREMENT,
+	name varchar(30),
+	about text,
+	PRIMARY KEY (ID)
+);
+ALTER TABLE authors ADD about text;
+
 
 
 

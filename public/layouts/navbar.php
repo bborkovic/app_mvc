@@ -1,5 +1,5 @@
 <?php use Core\Session; use App\Models\User; ?>
-<div class="container">
+<!-- <div class="container"> -->
   <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -51,4 +51,4 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-</div>
+<!-- </div> -->
