@@ -27,6 +27,8 @@ class Form {
 	// link to form action
 	public $action;
 
+	public $button_value = "Save";
+
 	// ?
 	public $validations;
 
@@ -71,10 +73,9 @@ class Form {
 	}
 
 	public function render() {
-
 		$return_html = "";
 
-		$this->render_form_begin();
+		$return_html .= $this->render_form_begin();
 
 		foreach ($this->fields as $field) {
 			if( isset($this->model_class->$field)) {
@@ -84,47 +85,57 @@ class Form {
 			}
 
 			if(isset($this->fields_select[$field])) {
-				$this->render_form_element_select($field, $value);
+				$return_html .= $this->render_form_element_select($field, $value);
 			} else {
-				$this->render_form_element($field, $value);
+				$return_html .= $this->render_form_element($field, $value);
 			}
 		}
-		$this->render_button();
-		$this->render_form_end();
+		$return_html .= $this->render_button();
+		$return_html .= $this->render_form_end();
+		return $return_html;
 	}
 
 	public function render_form_begin(){
 		//
-		echo "<form role=\"form\" action=\"{$this->action}\" method=\"{$this->method}\">";
+		return '<form role="form" action="' . $this->action . '" method="' . $this->method . '">';
 	}
 
 	public function render_form_end(){
 		//
-		echo "</form>";
+		return '</form>';
 	}
 
 	public function render_button(){
 		//
-		echo "<button type=\"submit\" class=\"btn btn-default\" name=\"submit\" value=\"Upload\">Save</button>";
+		return '<button type="submit" class="btn btn-primary" name="submit" value="Submit">' . $this->button_value . '</button>';
 	}
 
 	public function render_form_element_select($field, $value) {
-		$label = $this->validations[$field]["label"];
-
-		echo "<label for=\"select\">Select Author:</label>";
-		echo "<select class=\"form-control\" id=\"select\" name=\"$field\">";
+		if( isset($this->validations[$field]["label"])) {
+			$label = "Select " . $this->validations[$field]["label"];
+		} else {
+			$label = "Select " . $field;
+		}
+		
+		$ret_text = "";
+		$ret_text .= '<div class="form-group">';
+		$ret_text .= '<label for="select">' . $label . '</label>';
+		$ret_text .= '<select class="form-control" id="select" name="' . $field . '">';
 		foreach ($this->fields_select[$field] as $db_id => $display_value) {
 			$selected = ( $value == $db_id ) ? "selected" : "";
-			echo "<option value=\"$db_id\" $selected>$display_value</option>";
+			$ret_text .= '<option value="' . $db_id . '"' . $selected . '>' . $display_value . '</option>';
 		}
-		echo "</select>";
+		$ret_text .= '</select>';
+		$ret_text .= '</div>';
+		return $ret_text;
 	}
 
 	public function render_form_element($field, $value) {
+		$ret_text = '';
 		if( isset($this->validations[$field]["label"]) ) {
 			$label = $this->validations[$field]["label"];
 		} else {
-			$label = "No label";
+			$label = $field;
 		}
 
 		if( isset($this->validations[$field]["type"]) ) {
@@ -133,20 +144,24 @@ class Form {
 			$type = "text";
 		}
 
+		// depends if there is an error
+
+
 		if (array_key_exists ($field , $this->validation_errors)){
 			$error_text = $this->validation_errors[$field];
-			echo "<div class=\"form-group has-error has-feedback\">";
-			echo "<label for=\"{$field}\">{$label}</label>";
-			echo "<label class=\"text-danger\" for=\"{$field}\">&nbsp&nbsp**&nbsp{$error_text}</label>";
-			echo "<input type=\"{$type}\" class=\"form-control\" name=\"{$field}\" value=\"{$value}\"/>";
-			// echo "<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>";
-			echo "</div>";
+			$ret_text .= '<div class="form-group has-error has-feedback">';
+			$ret_text .= '<label for="' . $field . '">' . $label . '</label>';
+			$ret_text .= '<label class="text-danger" for="' . $field . '">&nbsp&nbsp**&nbsp' . $error_text . '</label>"';
+			$ret_text .= '<input type="' . $type . '" class="form-control" name="' . $field . '" value="' . $value . '"/>';
+			$ret_text .= "</div>";
 		} else {
-			echo "<div class=\"form-group\">";
-			echo "<label for=\"{$field}\">{$label}</label>";
-			echo "<input type=\"{$type}\" class=\"form-control\" name=\"{$field}\" value=\"{$value}\"/>";
-			echo "</div>";
+			$ret_text .= '<div class="form-group">';
+			$ret_text .= '<label for="' . $field . '">' . $label . '</label>';
+			// $ret_text .= '<input type="' . $type . '" class="form-control" name="' . $field . '" value="' . $value . '"/>';
+			$ret_text .= '<input type="' . $type . '" class="form-control" name="' . $field . '" value="' . $value . '"' . ' placeholder=""' . '/>';
+			$ret_text .= '</div>';
 		}
+		return $ret_text;
 	}
 
 	// populate class with POST elements
@@ -166,7 +181,12 @@ class Form {
 	}
 
 	public function validate_field( $field, $value) {
-		$validation_rules = $this->validations[$field];
+		if( isset($this->validations[$field])) {
+			$validation_rules = $this->validations[$field];
+		} else {
+			return;
+		}
+		
 
 		if( array_key_exists("allowEmpty", $validation_rules) ){
 			if ( strlen($value) == 0 and !$validation_rules["allowEmpty"] ){
@@ -191,6 +211,10 @@ class Form {
 		}
 	}
 
+
+	private function surround_qq($text) {
+		return '"' . $text . '"';
+	}
 
 }
 

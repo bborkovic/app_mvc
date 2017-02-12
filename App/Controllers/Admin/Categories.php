@@ -7,18 +7,18 @@ use Core\Form;
 use Core\Util;
 use Core\Session;
 use App\Models\User;
-use App\Models\Author;
+use App\Models\Category;
 
 
-class Authors extends \Core\Controller {
+class Categories extends \Core\Controller {
 	
 	public function indexAction() {
 		//
-		// echo "Hello from Namespace: Admin, Controller: Authors, Action: index";
+		// echo "Hello from Namespace: Admin, Controller: Categories, Action: index";
 
-		$authors = Author::find_all();
-		View::renderTemplate('Admin/Authors/index.html' , array(
-			"authors" => $authors,
+		$categories = Category::find_all();
+		View::renderTemplate('Admin/Categories/index.html' , array(
+			"categories" => $categories,
 			"messages" => $this->get_messages(),
 			)
 		);
@@ -26,7 +26,8 @@ class Authors extends \Core\Controller {
 
 	public function addNewAction() {
 		
-		$form = new Form("Author", ["first_name" , "last_name"]);
+		$form = new Form("Category", ["name"]);
+		$form->button_value = 'Create';
 
 		if(isset($_POST['submit'])) {
 			$author = $form->parsePost($_POST, true); // get post from parsed $_POST
@@ -43,7 +44,7 @@ class Authors extends \Core\Controller {
 			}
 		} 
 		// // render view
-		View::renderTemplate('Admin/Authors/new.html', array(
+		View::renderTemplate('Admin/Categories/new.html', array(
 			"form" => $form,
 			"messages" => $this->get_messages(),
 			) 
@@ -52,8 +53,8 @@ class Authors extends \Core\Controller {
 
 	public function editAction() {
 
-		$author = Author::find_by_id( $this->route_params['id'] );
-		$form = new Form($author, ["first_name" , "last_name"]);
+		$author = Category::find_by_id( $this->route_params['id'] );
+		$form = new Form($author, ["name"]);
 		
 		if(isset($_POST['submit'])) {
 			$post = $form->parsePost($_POST, true);
@@ -67,7 +68,7 @@ class Authors extends \Core\Controller {
 			}
 		}
 
-		View::renderTemplate('Admin/Authors/edit.html', array(
+		View::renderTemplate('Admin/Categories/edit.html', array(
 			"form" => $form,
 			"messages" => $this->get_messages(),
 			) 
@@ -111,7 +112,7 @@ class Authors extends \Core\Controller {
 		$array_of_messages = [];
 		$array_of_messages["username"] = User::get_logged_username();
 		$array_of_messages["message"] = get_message();
-		$array_of_messages["page_title"] = "Admin/Authors";
+		$array_of_messages["page_title"] = "Admin/Categories";
 		$array_of_messages["sidebar"] = $this->get_sidebar();
 		return $array_of_messages;
 	}

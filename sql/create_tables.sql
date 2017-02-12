@@ -36,6 +36,8 @@ CREATE TABLE books
 	FOREIGN key ( author_id) references authors(id)
 );
 
+alter table books add category_id int(11);
+
 CREATE TABLE publishers
 (
 	id int(11) NOT NULL AUTO_INCREMENT,

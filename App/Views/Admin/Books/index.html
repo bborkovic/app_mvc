@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+	<div id="categorys-index">
+		<table class="table">
+			<th>Photo</th>
+			<th>Name</th>
+			<th>Actions</th>
+			{% for book in books %}
+				<tr>
+					<td>
+						<img src="/uploads/books/{{ book.book_photo }}" class="img-thumbnail" alt="Cinque Terre" width="80" height="130">
+					</td>
+					{# <td>{{ book.book_photo }}</td> #}
+					<td>{{ book.name }}</td>
+					<td>
+						<a href="{{ book.id }}/edit">Edit</a> | 
+						<a href="{{ book.id }}/delete">Delete</a> |
+						<a href="{{ book.id }}/upload">Image</a>
+					</td>
+				</tr>
+			{% endfor  %}
+		</table>
+		<a href="add-new">
+			<button type="button" class="btn btn-primary btn-md">New Book</button>
+		</a>
+	</div>
+
+	<div class="center-block" text-align="center">
+		{{ paginator.displayPagination('') | raw }}
+	</div>
+
+{% endblock %}
+
+
+
+{% block sidebar %}
+	{{ messages.sidebar | raw }}
+{% endblock %}

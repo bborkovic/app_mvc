@@ -14,6 +14,8 @@
 	$router = new Core\Router();
 	$url = $_SERVER['QUERY_STRING'];
 
+	# fix redirects
+
 	$router->add('{controller}/{action}');
 	$router->add('{controller}/{id:\d+}/{action}');
 	$router->add('admin/{controller}/{action}', ['namespace'=>'Admin'] );

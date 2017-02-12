@@ -1,38 +1,27 @@
 <?php
+
 	error_reporting(E_ALL ^ E_DEPRECATED);
 	ini_set('display_errors', 1);
 
 	require_once '../Core/initialize.php';
 
-	// set_error_handler('Core\Error::errorHandler');
-	// set_exception_handler('Core\Error::exceptionHandler');
+	Core\Session::session_start();
 
- //    use Core\Form;
- //    use Core\Util;
- //    use Core\Paginator;
-    // use App\Models\Book;
+	set_error_handler('Core\Error::errorHandler');
+	set_exception_handler('Core\Error::exceptionHandler');
 
-?>
+	use Core\Database;
+	$db = new Database();
 
+	$ret = $db->query_select("select * from v_posts");
 
-<?php 
+	$columns = array_keys( reset($ret) );
 
-	use App\Models\Author;
-	use App\Admin\Controllers\Authors;
-	$authors = Author::find_all();
-
-	if ( class_exists('App\Admin\Controllers\Authors')) {
-		echo "<br/>" . "class Authors exists";
-	} else {
-		echo "<br/>" . "class Authors not exists";
+	foreach ($columns as $column) {
+		echo $column . " ";
 	}
 
-	// $controller_object = new Authors();
-	// $controller_object->test();
-
-
-
-	echo "End of script";
+	echo "<br/>";
 
  ?>
 

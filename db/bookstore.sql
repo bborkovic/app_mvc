@@ -28,7 +28,7 @@ CREATE TABLE `authors` (
   `last_name` varchar(30) DEFAULT NULL,
   `about` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `authors` (
 
 LOCK TABLES `authors` WRITE;
 /*!40000 ALTER TABLE `authors` DISABLE KEYS */;
-INSERT INTO `authors` VALUES (1,'Tom','Kyte',NULL),(2,'Darl','Kuhn',NULL),(3,'Steve','Prettyman','Steve Prettyman is a college instructor on PHP programming, web development and related.  He is and has been a practicing web developer and is a book author.');
+INSERT INTO `authors` VALUES (1,'Tom2','Kyte',NULL),(2,'Darl','Kuhn',NULL),(3,'Steve','Prettyman','Steve Prettyman is a college instructor on PHP programming, web development and related.  He is and has been a practicing web developer and is a book author.'),(4,'Michael','Hartl',NULL);
 /*!40000 ALTER TABLE `authors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -51,7 +51,7 @@ DROP TABLE IF EXISTS `books`;
 CREATE TABLE `books` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `author_id` int(11) NOT NULL,
-  `name` varchar(30) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
   `short_info` varchar(200) DEFAULT NULL,
   `about_book` text,
   `about_authors` text,
@@ -59,7 +59,7 @@ CREATE TABLE `books` (
   PRIMARY KEY (`id`),
   KEY `author_id` (`author_id`),
   CONSTRAINT `books_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,8 +68,57 @@ CREATE TABLE `books` (
 
 LOCK TABLES `books` WRITE;
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
-INSERT INTO `books` VALUES (2,3,'Learn PHP 7',NULL,NULL,NULL,'3_9781484217290.jpg'),(3,3,'PHP Arrays',NULL,NULL,NULL,'3_9781484225554.jpg'),(4,1,'Expert Oracle Database Archite',NULL,NULL,NULL,'1_9781430229469.jpg'),(5,1,'Expert Oracle Database Archite',NULL,NULL,NULL,'1_9781430262985.jpg'),(6,2,'Expert Oracle Indexing and Acc',NULL,NULL,NULL,'2_9781484219836.jpg'),(7,2,'Oracle RMAN Database Duplicati',NULL,NULL,NULL,'2_9781484211137.jpg'),(8,2,'RMAN Recipes for Oracle Databa',NULL,NULL,NULL,'2_9781430248361.jpg');
+INSERT INTO `books` VALUES (2,3,'Learn PHP 7','Object Oriented Modular Programming using HTML5, CSS3, JavaScript, XML, JSON, and MySQL',NULL,NULL,'3_9781484217290.jpg'),(3,3,'PHP Arrays',NULL,NULL,NULL,'3_9781484225554.jpg'),(4,1,'Expert Oracle Database Architecture',NULL,NULL,NULL,'1_9781430229469.jpg'),(5,1,'Expert Oracle Database Architecture',NULL,NULL,NULL,'1_9781430262985.jpg'),(6,2,'Expert Oracle Indexing and Access Paths',NULL,NULL,NULL,'2_9781484219836.jpg'),(7,2,'Oracle RMAN Database Duplication',NULL,NULL,NULL,'2_9781484211137.jpg'),(8,2,'RMAN Recipes for Oracle Database',NULL,NULL,NULL,'2_9781430248361.jpg'),(9,2,'Linux and Solaris Recipes for Oracle DBAs','Linux and Solaris Recipes for Oracle DBAs, 2nd Edition is an example–based book on managing Oracle Database under Linux and Solaris.','Linux and Solaris Recipes for Oracle DBAs, 2nd Edition is an example–based book on managing Oracle Database under Linux and Solaris.','','2_linux_and_solaris_recipes_3.jpg'),(10,2,'Linux and Solaris Recipes for Oracle DBAs','Linux and Solaris Recipes for Oracle DBAs, 2nd Edition is an example–based book on managing Oracle Database under Linux and Solaris.','Linux and Solaris Recipes for Oracle DBAs, 2nd Edition is an example–based book on managing Oracle Database under Linux and Solaris.','','2_linux_and_solaris_recipes_2.jpg'),(11,4,'Ruby on Rails Tutorial: Learn Web Development with Rails','Ruby on Rails Tutorial: Learn Web Development with Rails (4th Edition) (Addison-Wesley Professional Ruby Series) 4th Edition','Ruby on Rails Tutorial: Learn Web Development with Rails (4th Edition) (Addison-Wesley Professional Ruby Series) 4th Edition','','MH-ruby-on-rails_1.jpg'),(12,4,'Ruby on Rails Tutorial','Ruby on Rails Tutorial','Ruby on Rails Tutorial','','MH-ruby-on-rails_2.jpg'),(13,1,'Expert One-on-One Oracle','Expert One-on-One Oracle','A proven best-seller by the most recognized Oracle expert in the world','','TK-expert_one-to-one_1.jpg'),(14,1,'Expert One-on-One Oracle4','Expert One-on-One Oracle4','','','TK-expert_one-to-one_3.jpg'),(15,2,'Pro Oracle Database 12c Administration ','Pro Oracle Database 12c Administration 2nd (second) Edition by Kuhn, Darl published by Apress (2013)','Pro Oracle Database 12c Administration 2nd (second) Edition by Kuhn, Darl published by Apress (2013)','','pro_oracle_12c_administration.jpg'),(16,2,'Oracle Database Transactions and Locking Revealed','Oracle Database Transactions and Locking Revealed 1st ed. Edition','Oracle Database Transactions and Locking Revealed 1st ed. Edition','','oracle_database_transactions_2.jpg'),(17,2,'Oracle Database Transactions and Locking Revealed 2','Oracle Database Transactions and Locking Revealed 2','Oracle Database Transactions and Locking Revealed 2','','oracle_database_transactions_4.jpg'),(18,3,'PHP Arrays','PHP Arrays','PHP Arrays','','3_9781484225554_1.jpg'),(19,3,'PHP Arrays','PHP Arrays','','','3_9781484225554_5.jpg');
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `categories`
+--
+
+DROP TABLE IF EXISTS `categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categories`
+--
+
+LOCK TABLES `categories` WRITE;
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` VALUES (1,'Ruby on Rails3'),(2,'PHP'),(3,'Oracle'),(4,'Perl'),(5,'Linux2'),(6,'Open Source');
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `publishers`
+--
+
+DROP TABLE IF EXISTS `publishers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `publishers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) DEFAULT NULL,
+  `about` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `publishers`
+--
+
+LOCK TABLES `publishers` WRITE;
+/*!40000 ALTER TABLE `publishers` DISABLE KEYS */;
+INSERT INTO `publishers` VALUES (1,'Apress','Apress is a press company ...'),(2,'O\'Reilly','O\'Reilly press company ...'),(3,'Oracle Press','Oracle Press is company');
+/*!40000 ALTER TABLE `publishers` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -113,4 +162,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-26 15:18:20
+-- Dump completed on 2017-02-11 12:36:58

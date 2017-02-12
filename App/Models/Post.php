@@ -8,7 +8,7 @@ class Post extends Model {
 	
 	// table the class is related
 	public static $table_name = "posts";
-	public static $db_fields = array('id','name','details');
+	public static $db_fields = array('ID','NAME','DETAILS');
 	public static $primary_keys = array('id');
 	// columns of table users
 	
@@ -49,9 +49,9 @@ class Post extends Model {
 	public $parents = array(
 		);
 
-	public $id;
-	public $name;
-	public $details;
+	public $ID;
+	public $NAME;
+	public $DETAILS;
 
 
 

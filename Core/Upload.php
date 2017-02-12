@@ -57,8 +57,6 @@ class Upload {
 				$this->move_file($uploaded);
 			}
 		}
-		
-
 	}
 
 	public function set_max_size($bytes){
@@ -74,10 +72,12 @@ class Upload {
 	}
 
 	public function get_messages(){
+		//
 		return $this->messages;
 	}
 
 	public function getName() {
+		//
 		return $this->newName;
 	}
 
@@ -157,9 +157,10 @@ class Upload {
 	protected function checkName($file) {
 		$this->newName = null;
 		$nospaces = str_replace(' ', '_', $file['name']);
-		if($nospaces != $file['name']) {
-			$this->newName = $nospaces;
-		}
+		// if($nospaces != $file['name']) {
+		// 	$this->newName = $nospaces;
+		// }
+		$this->newName = $nospaces;
 		
 		// add suffix to suspisious file types
 		$nameparts = pathinfo($nospaces);
