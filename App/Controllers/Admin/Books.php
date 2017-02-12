@@ -19,7 +19,7 @@ class Books extends \Core\Controller {
 	
 	public function indexAction() {
 
-		$per_page = 10;
+		$per_page = 6;
 		$page = (isset($_GET['page'])) ? $_GET['page'] : 1;
 		$paginator = new Paginator($page, $per_page, Book::count_all() );
 		$books = $paginator->getModelData("Book");
