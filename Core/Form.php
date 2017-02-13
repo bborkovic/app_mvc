@@ -121,10 +121,20 @@ class Form {
 		$ret_text .= '<div class="form-group">';
 		$ret_text .= '<label for="select">' . $label . '</label>';
 		$ret_text .= '<select class="form-control" id="select" name="' . $field . '">';
+		$have_selected = 0;
 		foreach ($this->fields_select[$field] as $db_id => $display_value) {
-			$selected = ( $value == $db_id ) ? "selected" : "";
+			if( $value == $db_id ){
+				$selected = "selected";
+				$have_selected += 1;
+			} else {
+				$selected = "";
+			}
 			$ret_text .= '<option value="' . $db_id . '"' . $selected . '>' . $display_value . '</option>';
 		}
+		if( $have_selected == 0 ) { // add empty field
+			$ret_text .= '<option hidden selected></option>';
+		}
+		
 		$ret_text .= '</select>';
 		$ret_text .= '</div>';
 		return $ret_text;

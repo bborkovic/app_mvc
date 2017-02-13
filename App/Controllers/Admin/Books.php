@@ -21,20 +21,21 @@ class Books extends \Core\Controller {
 		// get list of books in paginated form
 		// and process search field if submitted
 		$per_page = 5;
-		$page = (isset($_GET['page'])) ? $_GET['page'] : 1; // set to one if not specified
-		$search = (isset($_GET['search'])) ? $_GET['search'] : '%'; // set to one if not specified
+		$page = (isset($_GET['page'])) ? $_GET['page'] : 1;
+		$search_query = (isset($_GET['search'])) ? $_GET['search'] : '%';
+		$search = (isset($_GET['search'])) ? $_GET['search'] : '';
 
-		$total_count = Book::count_by_sql("select count(*) from books where lower(name) like '%" . $search . "%'");
+		$total_count = Book::count_by_sql("select count(*) from books where name like '%" . $search_query . "%'");
 		$paginator = new Paginator($page, $per_page, $total_count);
-		$books = $paginator->getModelData("Book" , "where lower(name) like '%" . $search . "%'");
-		$paginator->url_params = ( $search != '%' ) ? [ "search" => $search ] : [];
+		$paginator->url_params = ( empty($search) ) ? [] : [ "search" => $search ];
 		$paginator->page_url = '/admin/books/index';
+		$books = $paginator->getModelData("Book" , "where lower(name) like '%" . $search_query . "%'");
 
 		View::renderTemplate('Admin/Books/index.html', array(
 				"books" => $books,
 				"paginator" => $paginator,
 				"messages" => $this->get_messages(),
-				"search" => str_replace('%', '' , $search),
+				"search" => $search,
 			)
 		);
 	}
@@ -60,8 +61,8 @@ class Books extends \Core\Controller {
 				Session::message(["Validation errors!" , "error"]);
 			} else {
 				if($publisher->create()) {
-					Session::message(["Publisher saved!" , "success"]);
-					redirect_to('index');
+					Session::message(["Book saved!" , "success"]);
+					redirect_to( $book->id . '/edit');
 				} else {
 					// Exception will be thrown
 				}
