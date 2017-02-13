@@ -10,16 +10,21 @@
 	set_error_handler('Core\Error::errorHandler');
 	set_exception_handler('Core\Error::exceptionHandler');
 
-	use Core\Database;
-	$db = new Database();
-
-	$ret = $db->query_select("select * from v_posts");
-
-	$columns = array_keys( reset($ret) );
-
-	foreach ($columns as $column) {
-		echo $column . " ";
+	$arr = ["search" => "the", "search2" => "end"];
+	foreach( $arr as $k => $v) {
+		// echo "&" . $k . '=' . $v;
 	}
+
+	$data = array('jedan'=>'JEDAN',
+              'dva'=>'DVA',
+              );
+
+	echo http_build_query($data) . "<br/>";
+	unset($data['jedan']);
+	echo http_build_query($data) . "<br/>";
+
+	// echo http_build_query($data, '', '&amp;');
+
 
 	echo "<br/>";
 

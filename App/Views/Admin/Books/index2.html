@@ -5,7 +5,7 @@
 {% block body %}
 
 	<!-- search form -->
-	<form id="seach-form" class="form-inline" method="get">
+<!-- 	<form id="seach-form" class="form-inline" method="get">
 		<div class="form-group">
 			<input type="text" class="form-control" name="search" value="{{ search }}" placeholder="search">
 		</div>
@@ -13,11 +13,11 @@
 			{% if search | length > 0 %}
 			<a href="index" class="btn btn-default" role="button">Clear</a>
 			{% endif %}
-	</form>
+	</form> -->
 
 	<br/>
 
-	<div id="categorys-index">
+	<div id="books-index">
 		<table class="table">
 			<th>Photo</th>
 			<th>Name</th>
@@ -49,7 +49,7 @@
 {% endblock %}
 
 
-
+<!--  messages.sidebar outputs html -->
 {% block sidebar %}
 	{{ messages.sidebar | raw }}
 {% endblock %}

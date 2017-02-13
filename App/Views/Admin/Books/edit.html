@@ -9,7 +9,13 @@
 	</div>
 
 	<br/>
-	<a href="../index">
+	{% if messages.latest_index_url == "/" %}
+		<a href="../index">
+	{% else %}
+		<a href="{{ messages.latest_index_url }}">
+	{% endif %}
+
+	
 		<button class="btn btn-default">Back to index</button>
 	</a>
 

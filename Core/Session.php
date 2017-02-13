@@ -129,7 +129,17 @@ class Session {
 				return $url;
 			}
 		}
-		return $current_url;
+		return '';
+	}
+
+	public static function get_latest_url_like($like) {
+		$current_url = static::$url[0];
+		foreach (static::$url as $url) {
+			if($url != $current_url and (strpos($url, $like) !== false) ){
+				return $url;
+			}
+		}
+		return '';
 	}
 
 

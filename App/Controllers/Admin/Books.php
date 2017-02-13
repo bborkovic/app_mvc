@@ -18,15 +18,23 @@ use Core\View;
 class Books extends \Core\Controller {
 	
 	public function indexAction() {
+		// get list of books in paginated form
+		// and process search field if submitted
+		$per_page = 5;
+		$page = (isset($_GET['page'])) ? $_GET['page'] : 1; // set to one if not specified
+		$search = (isset($_GET['search'])) ? $_GET['search'] : '%'; // set to one if not specified
 
-		$per_page = 6;
-		$page = (isset($_GET['page'])) ? $_GET['page'] : 1;
-		$paginator = new Paginator($page, $per_page, Book::count_all() );
-		$books = $paginator->getModelData("Book");
+		$total_count = Book::count_by_sql("select count(*) from books where lower(name) like '%" . $search . "%'");
+		$paginator = new Paginator($page, $per_page, $total_count);
+		$books = $paginator->getModelData("Book" , "where lower(name) like '%" . $search . "%'");
+		$paginator->url_params = ( $search != '%' ) ? [ "search" => $search ] : [];
+		$paginator->page_url = '/admin/books/index';
+
 		View::renderTemplate('Admin/Books/index.html', array(
 				"books" => $books,
 				"paginator" => $paginator,
 				"messages" => $this->get_messages(),
+				"search" => str_replace('%', '' , $search),
 			)
 		);
 	}
@@ -101,15 +109,7 @@ class Books extends \Core\Controller {
 		);
 	}
 
-	public function deleteAction() {
-		// $post = Post::find_by_id( $this->route_params['id'] );
-		// if($post->delete()) {
-		// 	Session::message(["Post <strong>$post->name</strong> deleted!" , "success"]);
-		// 	redirect_to('/posts/index');
-		// } else {
-		// 	Session::message(["Error saving! " . $error->get_errors() , "success"]);
-		// }
-	}
+	public function deleteAction() {}
 
 	public function uploadAction() {
 		
@@ -152,11 +152,7 @@ class Books extends \Core\Controller {
 			"messages" => $this->get_messages(),
 			)
 		);
-
-
 	}
-
-
 
 	protected function before() {
 		if( !Session::is_logged_in()){
@@ -186,6 +182,7 @@ class Books extends \Core\Controller {
 		$array_of_messages["message"] = get_message();
 		$array_of_messages["page_title"] = "Admin/Books";
 		$array_of_messages["sidebar"] = $this->get_sidebar();
+		$array_of_messages["latest_index_url"] = '/' . Session::get_latest_url_like("books/index");
 		return $array_of_messages;
 	}
 
