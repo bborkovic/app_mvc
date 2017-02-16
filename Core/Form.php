@@ -11,7 +11,7 @@ class Form {
 	public $model_class;
 
 	// array, list of fields to display in form
-	public $fields;
+	private $fields;
 
 	// array or fields of type select [ "cust_id"=>[ "value1"=>"display value1" , "value2"=>"display value2" ] ]
 	protected $fields_select = [];
@@ -31,6 +31,7 @@ class Form {
 
 	// ?
 	public $validations;
+	public $validate_fields = true;
 
 	// ?
 	public $field_types = array(
@@ -61,6 +62,11 @@ class Form {
 		// get validations from Model validations array
 		$this->validations = $this->model_class->validations;
 	}
+
+	public function setFieldValue($field, $value) {
+		$this->model_class->$field = $value;
+	}
+
 
 	public function setFieldsRadio($fields_radio) {
 		//
@@ -180,7 +186,9 @@ class Form {
 			$this->model_class->$field = $post_array[$field];
 			# Validate field according to rules
 			# And populate validation_array if found errors
-			$this->validate_field($field, $this->model_class->$field);
+			if($this->validate_fields) { // validate if it's been set this way
+				$this->validate_field($field, $this->model_class->$field);
+			}
 		}
 		return $this->model_class;
 	}
@@ -190,35 +198,91 @@ class Form {
 		return empty($this->validation_errors) ? false : true;
 	}
 
+	private function add_validation_error($field, $error_text){
+		if(isset($this->validation_errors[$field])) {
+			// append
+			$this->validation_errors[$field] .= ", " . $error_text;
+		} else {
+			$this->validation_errors[$field] = $error_text;
+		}
+	}
+
+	public function getValidationError($field) {
+		if ( isset($this->getValidation[$field])) {
+			return $this->getValidation[$field];
+		} else {
+			return false;
+		}
+	}
+	
+
 	public function validate_field( $field, $value) {
+
+		if(isset( $this->validations[$field]["label"] )){
+			$label = $this->validations[$field]["label"];
+		} else { 
+			$label = $field;
+		}
+
 		if( isset($this->validations[$field])) {
 			$validation_rules = $this->validations[$field];
-		} else {
-			return;
-		}
-		
+		} else { return; }
 
-		if( array_key_exists("allowEmpty", $validation_rules) ){
-			if ( strlen($value) == 0 and !$validation_rules["allowEmpty"] ){
-				$this->validation_errors[$field] = "Not Allow Empty!";
+		// loop through rules , and valideate value if defined to do so
+		// exit on first error, display only one value
+		foreach ($validation_rules as $rule => $rule_value) {
+
+			// validating "required"
+			if($rule === 'required'){
+				if(empty($value)) {
+					$this->add_validation_error($field, 'field "' . $label . '"' . " is required");
+					return; // additional checks not required!!
+				}
+			}
+
+			// validating "minlenght"
+			if( $rule == 'minlength' && strlen($value) < $rule_value ) {
+				$this->add_validation_error($field, 'field "' . $field . '"' . " length should be >= " . $rule_value);
 				return;
 			}
-		}
 
-		# Check length
-		if( array_key_exists("minlength", $validation_rules) ){
-			if ( strlen($value) < $validation_rules['minlength'] ) {
-				$this->validation_errors[$field] = "Lenght should be > " . $validation_rules['minlength'];
+			// validating "maxlenght"
+			if( $rule == 'maxlength' && strlen($value) > $rule_value ) {
+				$this->add_validation_error($field, 'field "' . $field . '"' . " length should be <= " . $rule_value);
 				return;
 			}
-		}
 
-		if( array_key_exists("maxlength", $validation_rules) ){
-			if ( strlen($value) > $validation_rules['maxlength'] ) {
-				$this->validation_errors[$field] = "Lenght should be < " . $validation_rules['maxlength'];
+			// validating "regexp"
+			if( $rule == 'regexp' && !preg_match($rule_value, $value) ) {
+				$this->add_validation_error($field, 'field "' . $field . '"' . " not matches {$rule_value}" );
 				return;
 			}
+
+
+
 		}
+
+	// if( array_key_exists("allowEmpty", $validation_rules) ){
+		// 	if ( strlen($value) == 0 and !$validation_rules["allowEmpty"] ){
+		// 		$this->validation_errors[$field] = "Not Allow Empty!";
+		// 		return;
+		// 	}
+		// }
+
+		// # Check length
+		// if( array_key_exists("minlength", $validation_rules) ){
+		// 	if ( strlen($value) < $validation_rules['minlength'] ) {
+		// 		$this->validation_errors[$field] = "Lenght should be > " . $validation_rules['minlength'];
+		// 		return;
+		// 	}
+		// }
+
+		// if( array_key_exists("maxlength", $validation_rules) ){
+		// 	if ( strlen($value) > $validation_rules['maxlength'] ) {
+		// 		$this->validation_errors[$field] = "Lenght should be < " . $validation_rules['maxlength'];
+		// 		return;
+		// 	}
+		// }
 	}
 
 

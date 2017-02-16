@@ -22,7 +22,7 @@ class Session {
 		session_start();
 		static::check_login();
 		static::check_message();
-		static::check_vars();
+		// static::check_vars();
 		static::check_url();
 	}
 
@@ -30,6 +30,27 @@ class Session {
 		//
 		return static::$logged_id;
 	}
+
+
+	public static function set($key, $value) {
+		// save value in SESSION array
+		$_SESSION[$key] = $value;
+	}
+
+	public static function get($key) {
+		// save value in SESSION array
+		if( isset($_SESSION[$key])) {
+			return $_SESSION[$key];
+		} else {
+			return null;
+		}
+	}
+
+	public static function delete($key) {
+		// save value in SESSION array
+		unset($_SESSION[$key]);
+	}
+
 
 	public static function login($user) {
 		// database should find user based on username/password

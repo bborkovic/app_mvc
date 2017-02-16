@@ -31,7 +31,8 @@ class Book extends Model {
 		"name" => array(
 			"type" => "text",
 			"label" => "Book Name",
-			"minlength" => 5,
+			"required" => true,
+			// "regexp" => '/\d+\.\d+/',
 			),
 		"short_info" => array(
 			"type" => "text",

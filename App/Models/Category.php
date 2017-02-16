@@ -15,12 +15,7 @@ class Category extends Model {
 		"name" => array(
 			"type" => "text",
 			"label" => "Name",
-			"rule" => "alphaNumeric",
 			"required" => true,
-			"allowEmpty" => false,
-			"maxlength" => 20,
-			"minlength" => 2,
-			"message" => "Name is not set"
 			),
 	);
 
